@@ -1,0 +1,99 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-panel: var(--panel);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-positive: var(--positive);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-paper: var(--canvas);
+  --color-sand: var(--panel);
+  --color-clay: var(--accent);
+  --color-fern: var(--positive);
+  --color-sage: var(--line);
+  --color-rust: var(--danger);
+  --font-sans: var(--font-body);
+  --font-serif: var(--font-display);
+}
+
+:root {
+  color-scheme: light;
+  --canvas: oklch(0.968 0.006 120);
+  --surface: oklch(0.995 0 0);
+  --panel: oklch(0.925 0.01 120);
+  --ink: oklch(0.18 0.018 130);
+  --muted: oklch(0.43 0.018 130);
+  --line: oklch(0.82 0.012 120);
+  --accent: oklch(0.48 0.082 75);
+  --accent-ink: oklch(0.985 0.004 120);
+  --positive: oklch(0.39 0.07 150);
+  --warning: oklch(0.58 0.105 70);
+  --danger: oklch(0.48 0.12 35);
+}
+
+.dark {
+  color-scheme: dark;
+  --canvas: oklch(0.145 0.014 130);
+  --surface: oklch(0.195 0.014 130);
+  --panel: oklch(0.255 0.016 130);
+  --ink: oklch(0.94 0.006 120);
+  --muted: oklch(0.72 0.01 120);
+  --line: oklch(0.35 0.014 130);
+  --accent: oklch(0.69 0.095 78);
+  --accent-ink: oklch(0.16 0.014 130);
+  --positive: oklch(0.72 0.08 150);
+  --warning: oklch(0.75 0.105 75);
+  --danger: oklch(0.68 0.13 35);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--canvas);
+}
+
+body {
+  min-height: 100vh;
+  background:
+    linear-gradient(180deg, color-mix(in oklch, var(--surface) 58%, transparent), transparent 22rem),
+    var(--canvas);
+  color: var(--ink);
+  text-rendering: geometricPrecision;
+}
+
+::selection {
+  background: color-mix(in oklch, var(--accent) 30%, transparent);
+  color: var(--ink);
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

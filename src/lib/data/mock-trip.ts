@@ -4,8 +4,14 @@ export const mockTrip: Trip = {
   id: "waypoint-sample-trip",
   title: "Kyoto long weekend",
   destinationId: "kyoto",
+  startDate: "2026-10-14",
+  endDate: "2026-10-21",
   travelers: 2,
   currency: "USD",
+  budgetTarget: 900,
+  pacePreference: "balanced",
+  planningNotes:
+    "Pack comfortable walking shoes for the Philosopher's Path and leave enough space for a quiet tea stop after Arashiyama.",
   updatedAt: "2026-06-10T00:00:00.000Z",
   days: [
     {

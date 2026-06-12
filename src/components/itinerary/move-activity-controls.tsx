@@ -18,10 +18,10 @@ export function MoveActivityControls({
 
   return (
     <div className="flex flex-wrap gap-2" aria-label="Move activity between days">
-      <Button type="button" variant="ghost" className="min-h-8 px-3 py-1 text-xs" disabled={!previousDay} onClick={() => previousDay && onMove(previousDay.id)}>
+      <Button type="button" variant="ghost" className="px-3 py-1 text-xs" disabled={!previousDay} onClick={() => previousDay && onMove(previousDay.id)}>
         Previous day
       </Button>
-      <Button type="button" variant="ghost" className="min-h-8 px-3 py-1 text-xs" disabled={!nextDay} onClick={() => nextDay && onMove(nextDay.id)}>
+      <Button type="button" variant="ghost" className="px-3 py-1 text-xs" disabled={!nextDay} onClick={() => nextDay && onMove(nextDay.id)}>
         Next day
       </Button>
     </div>

@@ -12,13 +12,28 @@ import { reorderActivity } from "@/lib/itinerary/reorder";
 import { loadStoredTrip, saveStoredTrip } from "@/lib/storage/local-storage";
 import type { Activity, Trip } from "@/types/travel";
 
+type TripSettings = Pick<
+  Trip,
+  | "title"
+  | "destinationId"
+  | "startDate"
+  | "endDate"
+  | "travelers"
+  | "currency"
+  | "budgetTarget"
+  | "pacePreference"
+  | "planningNotes"
+>;
+
 type TripAction =
   | { type: "hydrate"; trip: Trip }
   | { type: "addActivity"; dayId: string; activity: Activity }
   | { type: "updateActivity"; dayId: string; activity: Activity }
   | { type: "deleteActivity"; dayId: string; activityId: string }
+  | { type: "restoreActivity"; dayId: string; activity: Activity; index: number }
   | { type: "reorderActivity"; dayId: string; activityId: string; direction: "up" | "down" }
   | { type: "moveActivity"; fromDayId: string; toDayId: string; activityId: string }
+  | { type: "updateTripSettings"; settings: Partial<TripSettings> }
   | { type: "setTravelers"; travelers: number }
   | { type: "resetTrip" };
 
@@ -86,6 +101,19 @@ function tripReducer(trip: Trip, action: TripAction): Trip {
             : day,
         ),
       });
+    case "restoreActivity":
+      return withTimestamp({
+        ...trip,
+        days: trip.days.map((day) => {
+          if (day.id !== action.dayId) {
+            return day;
+          }
+
+          const nextActivities = [...day.activities];
+          nextActivities.splice(action.index, 0, action.activity);
+          return { ...day, activities: nextActivities };
+        }),
+      });
     case "reorderActivity":
       return withTimestamp({
         ...trip,
@@ -121,6 +149,27 @@ function tripReducer(trip: Trip, action: TripAction): Trip {
 
           return day;
         }),
+      });
+    }
+    case "updateTripSettings": {
+      const hasBudgetTarget = Object.prototype.hasOwnProperty.call(
+        action.settings,
+        "budgetTarget",
+      );
+
+      return withTimestamp({
+        ...trip,
+        ...action.settings,
+        travelers:
+          action.settings.travelers === undefined
+            ? trip.travelers
+            : Math.max(1, action.settings.travelers),
+        budgetTarget: hasBudgetTarget
+          ? action.settings.budgetTarget === undefined ||
+            Number.isNaN(action.settings.budgetTarget)
+            ? undefined
+            : Math.max(0, action.settings.budgetTarget)
+          : trip.budgetTarget,
       });
     }
     case "setTravelers":

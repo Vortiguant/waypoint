@@ -1,14 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Plus } from "lucide-react";
+import { Check, Plus, TriangleAlert } from "lucide-react";
 import type { Activity, ScheduleConflict, TripDay } from "@/types/travel";
 import { ActivityCard } from "@/components/itinerary/activity-card";
 import { ActivityForm } from "@/components/itinerary/activity-form";
 import { ConflictAlert } from "@/components/itinerary/conflict-alert";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { hasActivityConflict } from "@/lib/itinerary/conflicts";
 
 export function DayColumn({
@@ -36,54 +35,79 @@ export function DayColumn({
   const dayConflicts = conflicts.filter((conflict) => conflict.dayId === day.id);
 
   return (
-    <Card className="flex min-h-full flex-col p-4">
-      <div className="mb-4 flex items-start justify-between gap-4 border-b border-line pb-4">
-        <div>
-          <p className="text-sm font-semibold text-accent">{day.dateLabel}</p>
-          <h2 className="mt-2 font-serif text-3xl font-semibold leading-none tracking-[-0.015em] text-ink">{day.title}</h2>
-        </div>
-        <Button type="button" variant="secondary" className="min-h-9 gap-1 px-3 py-1 text-xs" onClick={() => setIsAdding((current) => !current)}>
-          <Plus className="size-3" aria-hidden="true" /> Add
-        </Button>
+    <section className="grid gap-5 md:grid-cols-[7rem_1fr]">
+      <div className="md:pt-2">
+        <p className="editorial-label text-accent">{day.dateLabel}</p>
+        <h2 className="mt-2 font-serif text-3xl font-semibold leading-tight tracking-[-0.02em] text-ink">
+          {day.title}
+        </h2>
+        <p className="mt-2 text-sm font-semibold text-muted">
+          {day.activities.length} {day.activities.length === 1 ? "activity" : "activities"}
+        </p>
       </div>
 
-      <ConflictAlert conflicts={dayConflicts} />
-
-      {isAdding ? (
-        <div className="mt-4 border border-line bg-panel p-4">
-          <ActivityForm
-            submitLabel="Add activity"
-            onSubmit={(activity) => {
-              onAddActivity(day.id, activity);
-              setIsAdding(false);
-            }}
-            onCancel={() => setIsAdding(false)}
-          />
+      <div className="relative md:border-l md:border-line md:pl-9">
+        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <ConflictAlert conflicts={dayConflicts} />
+          <Button
+            type="button"
+            variant="secondary"
+            className="shrink-0 gap-2"
+            onClick={() => setIsAdding((current) => !current)}
+          >
+            <Plus className="size-4" aria-hidden="true" />
+            Add activity
+          </Button>
         </div>
-      ) : null}
 
-      <div className="mt-4 flex flex-1 flex-col gap-3">
-        {day.activities.length === 0 ? (
-          <EmptyState title="No plans yet" description="Add the first timed or flexible stop for this day." />
-        ) : (
-          day.activities.map((activity, index) => (
-            <ActivityCard
-              key={activity.id}
-              activity={activity}
-              day={day}
-              days={days}
-              index={index}
-              totalActivities={day.activities.length}
-              hasConflict={hasActivityConflict(conflicts, day.id, activity.id)}
-              currency={currency}
-              onUpdate={(updatedActivity) => onUpdateActivity(day.id, updatedActivity)}
-              onDelete={() => onDeleteActivity(day.id, activity.id)}
-              onReorder={(direction) => onReorderActivity(day.id, activity.id, direction)}
-              onMove={(toDayId) => onMoveActivity(day.id, toDayId, activity.id)}
+        {isAdding ? (
+          <div className="motion-panel mb-5 rounded-2xl border border-line bg-panel p-4">
+            <ActivityForm
+              submitLabel="Add activity"
+              onSubmit={(activity) => {
+                onAddActivity(day.id, activity);
+                setIsAdding(false);
+              }}
+              onCancel={() => setIsAdding(false)}
             />
-          ))
-        )}
+          </div>
+        ) : null}
+
+        <div className="space-y-5">
+          {day.activities.length === 0 ? (
+            <EmptyState title="No plans yet" description="Add the first timed or flexible stop for this day." className="p-5" />
+          ) : (
+            day.activities.map((activity, index) => {
+              const activityHasConflict = hasActivityConflict(conflicts, day.id, activity.id);
+
+              return (
+                <div key={activity.id} className="relative">
+                  <span className="motion-timeline-node absolute -left-[3.75rem] top-8 hidden size-12 place-items-center rounded-full border-2 border-panel-raised bg-surface text-accent md:grid">
+                    {activityHasConflict ? (
+                      <TriangleAlert className="size-5 text-danger" aria-hidden="true" />
+                    ) : (
+                      <Check className="size-5 text-positive" aria-hidden="true" />
+                    )}
+                  </span>
+                  <ActivityCard
+                    activity={activity}
+                    day={day}
+                    days={days}
+                    index={index}
+                    totalActivities={day.activities.length}
+                    hasConflict={activityHasConflict}
+                    currency={currency}
+                    onUpdate={(updatedActivity) => onUpdateActivity(day.id, updatedActivity)}
+                    onDelete={() => onDeleteActivity(day.id, activity.id)}
+                    onReorder={(direction) => onReorderActivity(day.id, activity.id, direction)}
+                    onMove={(toDayId) => onMoveActivity(day.id, toDayId, activity.id)}
+                  />
+                </div>
+              );
+            })
+          )}
+        </div>
       </div>
-    </Card>
+    </section>
   );
 }

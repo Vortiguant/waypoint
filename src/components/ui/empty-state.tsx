@@ -12,7 +12,7 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        "rounded-2xl border border-dashed border-line bg-panel/55 p-8 text-center",
+        "motion-panel rounded-2xl border border-dashed border-line bg-panel p-8 text-center",
         className,
       )}
     >

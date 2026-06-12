@@ -13,9 +13,19 @@ export function DestinationGrid({ destinations }: { destinations: Destination[] 
   }
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+    <div className="motion-grid grid gap-5 md:grid-cols-2 xl:grid-cols-3">
       {destinations.map((destination, index) => (
-        <DestinationCard key={destination.id} destination={destination} priority={index === 0} />
+        <div
+          key={destination.id}
+          className={index === 3 ? "xl:col-span-2" : undefined}
+        >
+          <DestinationCard
+            destination={destination}
+            priority={index < 4}
+            featured={index === 3}
+            badge={index === 0 ? "Strongest current match" : undefined}
+          />
+        </div>
       ))}
     </div>
   );

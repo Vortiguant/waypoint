@@ -9,6 +9,14 @@ const activityCategorySchema = z.enum([
   "other",
 ]);
 
+const pacePreferenceSchema = z.enum(["relaxed", "balanced", "packed"]);
+
+const optionalDateSchema = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/, "Use YYYY-MM-DD date format.")
+  .or(z.literal(""))
+  .optional();
+
 const optionalTimeSchema = z
   .string()
   .regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Use HH:MM time.")
@@ -51,8 +59,13 @@ export const tripSchema = z.object({
   id: z.string(),
   title: z.string(),
   destinationId: z.string(),
+  startDate: optionalDateSchema,
+  endDate: optionalDateSchema,
   travelers: z.number().int().min(1),
   currency: z.string().min(3),
+  budgetTarget: z.coerce.number().min(0).optional(),
+  pacePreference: pacePreferenceSchema.default("balanced"),
+  planningNotes: z.string().optional().default(""),
   days: z.array(tripDaySchema),
   updatedAt: z.string(),
 });

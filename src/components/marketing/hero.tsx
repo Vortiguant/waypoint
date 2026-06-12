@@ -1,68 +1,52 @@
+import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, CalendarDays, MapPinned, WalletCards } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function Hero() {
   return (
-    <section className="px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
-      <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.92fr_1.08fr] lg:items-end">
-        <div className="max-w-3xl">
-          <p className="text-sm font-semibold text-accent">Editorial travel planning</p>
-          <h1 className="mt-4 font-serif text-6xl font-semibold leading-[0.94] tracking-[-0.03em] text-ink sm:text-7xl lg:text-8xl">
-            A quieter desk for sharper trips.
+    <section className="relative min-h-[42rem] overflow-hidden border-b border-line px-4 py-20 text-white sm:px-6 sm:py-24 lg:px-8 lg:py-28">
+      <Image
+        src="/images/editorial/kyoto-hero.png"
+        alt="Japanese temple pavilion reflected in a still pond during golden hour."
+        fill
+        preload
+        loading="eager"
+        fetchPriority="high"
+        sizes="100vw"
+        className="motion-hero-media object-cover"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/78 via-black/34 to-black/10" />
+      <div className="relative mx-auto flex min-h-[32rem] max-w-7xl flex-col justify-end">
+        <div className="motion-hero-copy max-w-3xl pb-4">
+          <p className="editorial-label text-white/78">Curated narratives</p>
+          <h1 className="mt-5 max-w-3xl font-serif text-5xl font-semibold leading-[1.02] tracking-[-0.025em] text-white sm:text-6xl lg:text-7xl">
+            Editorial travel planning for considered routes.
           </h1>
-          <p className="mt-7 max-w-2xl text-lg leading-8 text-muted">
-            Waypoint turns destination evidence, day-by-day schedules, conflict checks, and budget math into one composed planning workspace.
+          <p className="mt-7 max-w-2xl text-base font-medium leading-8 text-white/88 md:text-lg">
+            Moving beyond the destination, Waypoint curates experiences that honor the craft of exploration. From hidden coastal retreats to architectural wonders, shape your next chapter with evidence and calm.
           </p>
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-            <Link href="/itinerary">
+          <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+            <Link href="/destinations">
               <Button className="w-full gap-2 sm:w-auto">
-                Start the itinerary <ArrowRight className="size-4" aria-hidden="true" />
+                Explore destinations <ArrowRight className="size-4" aria-hidden="true" />
               </Button>
             </Link>
-            <Link href="/destinations">
-              <Button variant="secondary" className="w-full sm:w-auto">Browse destinations</Button>
+            <Link href="/itinerary">
+              <Button variant="secondary" className="w-full border-white/35 bg-white/10 text-white hover:border-white hover:bg-white/18 sm:w-auto">
+                Plan an itinerary
+              </Button>
             </Link>
           </div>
-        </div>
-
-        <div className="border border-line bg-surface p-4 md:p-5">
-          <div className="grid gap-4 md:grid-cols-[0.95fr_1.05fr]">
-            <article className="flex min-h-72 flex-col justify-between bg-panel p-5">
-              <div>
-                <MapPinned className="size-6 text-accent" aria-hidden="true" />
-                <p className="mt-7 font-serif text-4xl font-semibold leading-none tracking-[-0.02em]">Kyoto field notes</p>
-                <p className="mt-4 text-sm leading-6 text-muted">Temple gardens at dawn, Nishiki for lunch, ryokan tea before the evening train.</p>
-              </div>
-              <p className="mt-6 text-sm font-semibold text-ink">4.9 rating · Mar, Apr, Nov</p>
-            </article>
-
-            <div className="space-y-4">
-              <article className="bg-ink p-5 text-surface dark:bg-panel dark:text-ink">
-                <CalendarDays className="size-6" aria-hidden="true" />
-                <div className="mt-6 space-y-4">
-                  {[
-                    ["06:30", "Fushimi Inari sunrise"],
-                    ["12:00", "Nishiki Market lunch"],
-                    ["15:00", "Ceramics studio visit"],
-                  ].map(([time, label]) => (
-                    <div key={label} className="grid grid-cols-[3.5rem_1fr] gap-3 border-t border-surface/20 pt-3 text-sm dark:border-ink/15">
-                      <span className="font-mono opacity-70">{time}</span>
-                      <span className="font-semibold">{label}</span>
-                    </div>
-                  ))}
-                </div>
-              </article>
-
-              <article className="border border-line p-5">
-                <WalletCards className="size-6 text-accent" aria-hidden="true" />
-                <p className="mt-6 text-sm font-semibold text-muted">Trip budget</p>
-                <div className="mt-2 flex items-end justify-between gap-4">
-                  <p className="font-serif text-5xl font-semibold leading-none tracking-[-0.02em]">$694</p>
-                  <p className="pb-1 text-sm font-semibold text-muted">$347 per traveler</p>
-                </div>
-              </article>
-            </div>
+          <div className="mt-10 flex flex-wrap gap-3">
+            {["Architecture", "Coastal", "Culinary", "Slow Living"].map((item) => (
+              <span
+                key={item}
+                className="rounded-lg border border-white/24 bg-black/20 px-3 py-1.5 text-xs font-semibold text-white/82"
+              >
+                {item}
+              </span>
+            ))}
           </div>
         </div>
       </div>

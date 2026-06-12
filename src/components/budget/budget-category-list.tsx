@@ -1,30 +1,51 @@
-import type { BudgetSummary } from "@/types/travel";
+import { Landmark, Map, ShoppingBag, Soup, Ticket, Train } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import type { ActivityCategory, BudgetSummary } from "@/types/travel";
 import { Card } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/utils";
+
+const categoryMeta: Record<ActivityCategory, { label: string; Icon: LucideIcon }> = {
+  transport: { label: "Regional Transport", Icon: Train },
+  lodging: { label: "Boutique Lodging", Icon: Landmark },
+  food: { label: "Curated Dining", Icon: Soup },
+  activity: { label: "Experiences", Icon: Ticket },
+  shopping: { label: "Shopping", Icon: ShoppingBag },
+  other: { label: "Other", Icon: Map },
+};
 
 export function BudgetCategoryList({ summary, currency }: { summary: BudgetSummary; currency: string }) {
   const largest = Math.max(...summary.byCategory.map((item) => item.total), 1);
 
   return (
-    <Card>
-      <div className="flex items-end justify-between gap-4">
+    <Card className="p-6 md:p-8">
+      <div className="flex flex-col gap-3 border-b border-line pb-5 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm font-semibold text-accent">Category weight</p>
-          <h2 className="mt-3 font-serif text-4xl font-semibold tracking-[-0.02em] text-ink">Where the money goes</h2>
+          <p className="editorial-label text-accent">Allocation</p>
+          <h2 className="mt-2 font-serif text-3xl font-semibold tracking-[-0.02em] text-ink">
+            Where the money goes
+          </h2>
         </div>
+        <p className="text-sm font-semibold text-muted">Updated today at 10:45 AM</p>
       </div>
-      <div className="mt-6 space-y-4">
+
+      <div className="mt-7 space-y-7">
         {summary.byCategory.map((item) => {
-          const width = `${Math.max(4, (item.total / largest) * 100)}%`;
+          const width = `${Math.max(3, (item.total / largest) * 100)}%`;
+          const { label, Icon } = categoryMeta[item.category];
 
           return (
-            <div key={item.category}>
-              <div className="mb-2 flex items-center justify-between gap-4 text-sm">
-                <span className="font-bold capitalize text-ink">{item.category}</span>
-                <span className="text-muted">{formatCurrency(item.total, currency)}</span>
+            <div key={item.category} className="space-y-2">
+              <div className="flex items-end justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <Icon className="size-5 text-accent" aria-hidden="true" />
+                  <span className="text-sm font-bold text-ink">{label}</span>
+                </div>
+                <span className="text-sm font-semibold text-muted">
+                  {formatCurrency(item.total, currency)}
+                </span>
               </div>
-              <div className="h-2 overflow-hidden rounded-full bg-panel">
-                <div className="h-full rounded-full bg-accent" style={{ width }} />
+              <div className="h-3 overflow-hidden rounded-lg bg-panel">
+                <div className="motion-budget-bar h-full rounded-lg bg-accent transition-[width] duration-500 ease-[var(--ease-out)]" style={{ width }} />
               </div>
             </div>
           );

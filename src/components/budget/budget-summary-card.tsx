@@ -12,19 +12,37 @@ export function BudgetSummaryCard({
   travelers: number;
 }) {
   return (
-    <Card className="grid gap-5 md:grid-cols-2">
-      <div>
-        <p className="text-sm font-semibold text-accent">Total trip cost</p>
-        <p className="mt-4 font-serif text-6xl font-semibold leading-none tracking-[-0.025em] text-ink">
-          {formatCurrency(summary.totalCost, currency)}
-        </p>
+    <Card className="p-6 md:p-8">
+      <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
+        <div>
+          <h2 className="font-serif text-3xl font-semibold tracking-[-0.02em] text-ink">
+            Budget Distribution
+          </h2>
+          <p className="mt-3 max-w-xl text-sm leading-6 text-muted">
+            Current allocation across lodging, transport, dining, activities, and discretionary spend.
+          </p>
+        </div>
+        <div className="text-left md:text-right">
+          <p className="text-sm font-semibold text-muted">Total</p>
+          <p className="mt-1 font-serif text-4xl font-semibold leading-none text-accent">
+            {formatCurrency(summary.totalCost, currency)}
+          </p>
+        </div>
       </div>
-      <div className="bg-ink p-5 text-surface dark:bg-panel dark:text-ink">
-        <p className="text-sm font-semibold opacity-75">Per traveler</p>
-        <p className="mt-4 font-serif text-5xl font-semibold leading-none tracking-[-0.02em]">
-          {formatCurrency(summary.perTravelerCost, currency)}
-        </p>
-        <p className="mt-3 text-sm opacity-75">Split across {travelers} {travelers === 1 ? "traveler" : "travelers"}.</p>
+
+      <div className="mt-8 grid gap-4 border-t border-line pt-6 sm:grid-cols-2">
+        <div>
+          <p className="editorial-label text-muted">Per traveler</p>
+          <p className="mt-3 font-serif text-4xl font-semibold text-ink">
+            {formatCurrency(summary.perTravelerCost, currency)}
+          </p>
+        </div>
+        <div>
+          <p className="editorial-label text-muted">Split</p>
+          <p className="mt-3 text-lg font-semibold leading-7 text-ink">
+            Across {travelers} {travelers === 1 ? "traveler" : "travelers"} with every itinerary cost included.
+          </p>
+        </div>
       </div>
     </Card>
   );

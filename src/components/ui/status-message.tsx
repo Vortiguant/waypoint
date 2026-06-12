@@ -12,13 +12,13 @@ export function StatusMessage({
   const tones = {
     info: "border-accent/25 bg-accent/10 text-ink",
     success: "border-positive/30 bg-positive/10 text-positive",
-    error: "border-danger/30 bg-danger/10 text-danger",
+    error: "border-danger/35 bg-danger/10 text-danger",
   } as const;
 
   return (
     <div
       className={cn(
-        "rounded-xl border px-4 py-3 text-sm font-medium leading-6",
+        "motion-status rounded-lg border px-4 py-3 text-sm font-semibold leading-6",
         tones[tone],
         className,
       )}

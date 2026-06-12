@@ -1,63 +1,58 @@
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import type { Destination } from "@/types/travel";
-import { Card } from "@/components/ui/card";
-import { formatCurrency } from "@/lib/utils";
+import { cn, formatCurrency } from "@/lib/utils";
 
 export function DestinationCard({
   destination,
   priority = false,
+  featured = false,
+  badge,
 }: {
   destination: Destination;
   priority?: boolean;
+  featured?: boolean;
+  badge?: string;
 }) {
   return (
-    <Card className="group flex h-full flex-col overflow-hidden p-0 transition-[border-color,transform] duration-200 ease-out hover:-translate-y-px hover:border-accent/45">
-      <div className="relative h-44 overflow-hidden bg-panel">
-        <div className="absolute inset-0 scale-105 transition-transform duration-500 ease-out group-hover:scale-100" style={{ background: destination.image }} />
-        <div className="absolute inset-0 bg-gradient-to-t from-ink/55 via-ink/5 to-transparent" />
-        <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-3 text-white">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] opacity-80">
-              {destination.country} · {destination.region}
-            </p>
-            <h2 className="mt-1 font-serif text-3xl font-semibold leading-none tracking-[-0.015em]">
-              {destination.name}
-            </h2>
-          </div>
-          <span className="shrink-0 rounded-full bg-white px-2.5 py-1 text-sm font-bold text-ink">
-            {destination.rating.toFixed(1)}
-          </span>
-        </div>
-      </div>
-
-      <div className="flex flex-1 flex-col p-5">
-        {priority ? (
-          <p className="mb-4 border-b border-line pb-3 text-sm font-semibold text-accent">
-            Strongest current match
-          </p>
+    <Link
+      href={`/destinations/${destination.id}`}
+      className={cn(
+        "group motion-panel relative block overflow-hidden rounded-2xl bg-panel-raised text-white outline-none ring-offset-2 ring-offset-canvas transition-[transform,box-shadow,filter] duration-300 ease-[var(--ease-out)] focus-visible:ring-2 focus-visible:ring-accent",
+        "hover:-translate-y-1 hover:shadow-[var(--shadow-soft)] active:translate-y-0",
+        featured ? "min-h-[28rem] md:min-h-[34rem]" : "min-h-[21rem]",
+      )}
+    >
+      <Image
+        src={destination.imageSrc}
+        alt={destination.imageAlt}
+        fill
+        preload={priority}
+        loading={priority ? "eager" : "lazy"}
+        fetchPriority={priority ? "high" : "auto"}
+        sizes={featured ? "(min-width: 1024px) 66vw, 100vw" : "(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"}
+        className="object-cover transition-transform duration-700 ease-[var(--ease-out-expo)] group-hover:scale-105"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/18 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 p-5 md:p-7">
+        {badge ? (
+          <p className="editorial-label mb-3 text-white/80">{badge}</p>
         ) : null}
-        <p className="text-sm leading-6 text-muted">{destination.description}</p>
-
-        <dl className="mt-5 grid grid-cols-2 gap-4 border-y border-line py-4">
-          <div>
-            <dt className="text-xs font-semibold text-muted">Best window</dt>
-            <dd className="mt-1 text-sm font-bold text-ink">{destination.bestMonths.join(", ")}</dd>
-          </div>
-          <div className="text-right">
-            <dt className="text-xs font-semibold text-muted">Daily cost</dt>
-            <dd className="mt-1 text-sm font-bold text-ink">
-              {formatCurrency(destination.estimatedDailyCost)}
-            </dd>
-          </div>
-        </dl>
-
-        <div className="mt-4 flex flex-wrap gap-x-3 gap-y-2">
-          {destination.tags.map((tag) => (
-            <span key={tag} className="text-xs font-semibold text-muted">
-              {tag}
-            </span>
-          ))}
+        <p className="editorial-label text-white/75">{destination.country}</p>
+        <h2 className="mt-2 font-serif text-2xl font-semibold leading-tight tracking-[-0.02em] md:text-3xl">
+          {destination.name}
+        </h2>
+        <p className="mt-3 max-w-md text-sm font-medium leading-6 text-white/90">
+          {destination.description}
+        </p>
+        <div className="mt-5 flex flex-wrap items-center gap-3 text-xs font-bold text-white/85">
+          <span>{destination.rating.toFixed(1)} rating</span>
+          <span aria-hidden="true">/</span>
+          <span>{formatCurrency(destination.estimatedDailyCost)} / day</span>
+          <ArrowRight className="ml-auto size-4 transition-transform duration-200 ease-[var(--ease-out)] group-hover:translate-x-1" aria-hidden="true" />
         </div>
       </div>
-    </Card>
+    </Link>
   );
 }

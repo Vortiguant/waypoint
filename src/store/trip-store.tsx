@@ -10,7 +10,14 @@ import {
 import { mockTrip } from "@/lib/data/mock-trip";
 import { reorderActivity } from "@/lib/itinerary/reorder";
 import { loadStoredTrip, saveStoredTrip } from "@/lib/storage/local-storage";
-import type { Activity, Trip } from "@/types/travel";
+import type {
+  Activity,
+  MapPin,
+  PackingItem,
+  PinnedDecision,
+  Trip,
+  TripDocument,
+} from "@/types/travel";
 
 type TripSettings = Pick<
   Trip,
@@ -34,6 +41,19 @@ type TripAction =
   | { type: "reorderActivity"; dayId: string; activityId: string; direction: "up" | "down" }
   | { type: "moveActivity"; fromDayId: string; toDayId: string; activityId: string }
   | { type: "updateTripSettings"; settings: Partial<TripSettings> }
+  | { type: "addPackingItem"; item: PackingItem }
+  | { type: "updatePackingItem"; item: PackingItem }
+  | { type: "togglePackingItem"; itemId: string }
+  | { type: "deletePackingItem"; itemId: string }
+  | { type: "addDocument"; document: TripDocument }
+  | { type: "updateDocument"; document: TripDocument }
+  | { type: "deleteDocument"; documentId: string }
+  | { type: "addPinnedDecision"; decision: PinnedDecision }
+  | { type: "updatePinnedDecision"; decision: PinnedDecision }
+  | { type: "deletePinnedDecision"; decisionId: string }
+  | { type: "addMapPin"; pin: MapPin }
+  | { type: "updateMapPin"; pin: MapPin }
+  | { type: "deleteMapPin"; pinId: string }
   | { type: "setTravelers"; travelers: number }
   | { type: "resetTrip" };
 
@@ -172,6 +192,81 @@ function tripReducer(trip: Trip, action: TripAction): Trip {
           : trip.budgetTarget,
       });
     }
+    case "addPackingItem":
+      return withTimestamp({
+        ...trip,
+        packingItems: [...trip.packingItems, action.item],
+      });
+    case "updatePackingItem":
+      return withTimestamp({
+        ...trip,
+        packingItems: trip.packingItems.map((item) =>
+          item.id === action.item.id ? action.item : item,
+        ),
+      });
+    case "togglePackingItem":
+      return withTimestamp({
+        ...trip,
+        packingItems: trip.packingItems.map((item) =>
+          item.id === action.itemId ? { ...item, packed: !item.packed } : item,
+        ),
+      });
+    case "deletePackingItem":
+      return withTimestamp({
+        ...trip,
+        packingItems: trip.packingItems.filter((item) => item.id !== action.itemId),
+      });
+    case "addDocument":
+      return withTimestamp({
+        ...trip,
+        documents: [...trip.documents, action.document],
+      });
+    case "updateDocument":
+      return withTimestamp({
+        ...trip,
+        documents: trip.documents.map((document) =>
+          document.id === action.document.id ? action.document : document,
+        ),
+      });
+    case "deleteDocument":
+      return withTimestamp({
+        ...trip,
+        documents: trip.documents.filter((document) => document.id !== action.documentId),
+      });
+    case "addPinnedDecision":
+      return withTimestamp({
+        ...trip,
+        pinnedDecisions: [...trip.pinnedDecisions, action.decision],
+      });
+    case "updatePinnedDecision":
+      return withTimestamp({
+        ...trip,
+        pinnedDecisions: trip.pinnedDecisions.map((decision) =>
+          decision.id === action.decision.id ? action.decision : decision,
+        ),
+      });
+    case "deletePinnedDecision":
+      return withTimestamp({
+        ...trip,
+        pinnedDecisions: trip.pinnedDecisions.filter(
+          (decision) => decision.id !== action.decisionId,
+        ),
+      });
+    case "addMapPin":
+      return withTimestamp({
+        ...trip,
+        mapPins: [...trip.mapPins, action.pin],
+      });
+    case "updateMapPin":
+      return withTimestamp({
+        ...trip,
+        mapPins: trip.mapPins.map((pin) => (pin.id === action.pin.id ? action.pin : pin)),
+      });
+    case "deleteMapPin":
+      return withTimestamp({
+        ...trip,
+        mapPins: trip.mapPins.filter((pin) => pin.id !== action.pinId),
+      });
     case "setTravelers":
       return withTimestamp({ ...trip, travelers: Math.max(1, action.travelers) });
     case "resetTrip":

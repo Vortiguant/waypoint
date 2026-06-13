@@ -10,6 +10,27 @@ export type ActivityCategory =
 
 export type PacePreference = "relaxed" | "balanced" | "packed";
 
+export type PackingCategory =
+  | "clothing"
+  | "documents"
+  | "health"
+  | "electronics"
+  | "comfort"
+  | "other";
+
+export type TripDocumentStatus = "missing" | "needed" | "ready";
+
+export type TripDecisionStatus = "open" | "decided" | "watch";
+
+export type MapPinCategory =
+  | "arrival"
+  | "stay"
+  | "food"
+  | "activity"
+  | "transfer"
+  | "errand"
+  | "other";
+
 export type Destination = {
   id: string;
   name: string;
@@ -66,6 +87,35 @@ export type TripDay = {
   activities: Activity[];
 };
 
+export type PackingItem = {
+  id: string;
+  label: string;
+  category: PackingCategory;
+  packed: boolean;
+};
+
+export type TripDocument = {
+  id: string;
+  label: string;
+  status: TripDocumentStatus;
+  notes?: string;
+};
+
+export type PinnedDecision = {
+  id: string;
+  title: string;
+  status: TripDecisionStatus;
+  notes?: string;
+};
+
+export type MapPin = {
+  id: string;
+  title: string;
+  location: string;
+  category: MapPinCategory;
+  dayId?: string;
+};
+
 export type Trip = {
   id: string;
   title: string;
@@ -77,6 +127,10 @@ export type Trip = {
   budgetTarget?: number;
   pacePreference: PacePreference;
   planningNotes?: string;
+  packingItems: PackingItem[];
+  documents: TripDocument[];
+  pinnedDecisions: PinnedDecision[];
+  mapPins: MapPin[];
   days: TripDay[];
   updatedAt: string;
 };
@@ -139,4 +193,36 @@ export type TripInsights = {
     destinationRating: number;
   };
   recommendations: InsightRecommendation[];
+};
+
+export type TripReadiness = {
+  score: number;
+  status: InsightStatus;
+  label: string;
+  detail: string;
+  inputs: InsightScore[];
+  counts: {
+    packedItems: number;
+    totalPackingItems: number;
+    readyDocuments: number;
+    totalDocuments: number;
+    decidedPinnedDecisions: number;
+    totalPinnedDecisions: number;
+    mapPins: number;
+    conflicts: number;
+  };
+};
+
+export type TripNextAction = {
+  id: string;
+  tone: "info" | "success" | "warning";
+  title: string;
+  description: string;
+  href?: string;
+};
+
+export type GroupedMapPins = {
+  label: string;
+  dayId?: string;
+  pins: MapPin[];
 };

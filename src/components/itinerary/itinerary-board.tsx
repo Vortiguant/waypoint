@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import { BedDouble, CalendarDays, Car, CloudSun, RotateCcw, Share2 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { Activity } from "@/types/travel";
@@ -148,6 +149,12 @@ export function ItineraryBoard() {
                 <p className="mt-4 text-lg leading-7 text-muted">{dateRange}</p>
               </div>
               <div className="flex flex-wrap gap-3">
+                <Link
+                  href="/workspace"
+                  className="inline-flex min-h-11 items-center justify-center rounded-lg border border-line bg-surface px-5 py-2.5 text-sm font-bold text-ink transition hover:-translate-y-px hover:border-accent hover:bg-panel focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent dark:bg-panel dark:hover:bg-surface"
+                >
+                  Workspace
+                </Link>
                 <Button type="button" variant="secondary" className="gap-2" onClick={downloadCalendar}>
                   <CalendarDays className="size-4" aria-hidden="true" />
                   Calendar

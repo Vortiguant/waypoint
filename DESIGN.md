@@ -88,7 +88,16 @@ Current editorial assets:
 ## Route Patterns
 
 - `/`: editorial landing with hero narrative, image-led destination grid, dispatch signup, and footer.
+- `/workspace`: local-first command center with readiness scoring, next actions, packing, documents, pinned decisions, and map-context pins.
 - `/destinations`: searchable editorial browser retaining filter and sort behavior.
 - `/destinations/[id]`: destination feature story with hero image, narrative, top decisions, inquiry panel, and stays.
 - `/itinerary`: timeline planner preserving add, edit, delete, reorder, move, reset, conflict detection, and hydration notices.
 - `/budget`: trip insights dashboard preserving budget math, traveler controls, category totals, and local trip state.
+
+## Local Workspace Model
+
+Trip prep data lives in the same local trip object as itinerary and budget state. The current storage key is `waypoint.trip.v3`, migrated from `waypoint.trip.v2` and `waypoint.trip.v1`.
+
+- Packing, document, decision, and map-pin controls should use inline editing rather than modal-heavy workflows.
+- Readiness and next actions must stay deterministic and explainable.
+- Map context is a static planning board, not a live map API.

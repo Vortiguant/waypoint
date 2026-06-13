@@ -15,6 +15,10 @@ describe("createTripShareSummary", () => {
       currency: "USD",
       pacePreference: "balanced",
       planningNotes: "Keep one quiet afternoon.",
+      packingItems: [],
+      documents: [],
+      pinnedDecisions: [],
+      mapPins: [],
       updatedAt: "2026-06-10T00:00:00.000Z",
       days: [
         {

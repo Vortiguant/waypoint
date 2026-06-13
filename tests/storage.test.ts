@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
+  INITIAL_TRIP_STORAGE_KEY,
   LEGACY_TRIP_STORAGE_KEY,
   loadStoredTrip,
   normalizeTrip,
@@ -47,15 +48,19 @@ afterEach(() => {
 });
 
 describe("local storage migration", () => {
-  it("normalizes v1 trips with v2 defaults", () => {
+  it("normalizes older trips with v3 defaults", () => {
     const trip = normalizeTrip(legacyTrip);
 
     expect(trip?.pacePreference).toBe("balanced");
     expect(trip?.planningNotes).toBe("");
+    expect(trip?.packingItems).toEqual([]);
+    expect(trip?.documents).toEqual([]);
+    expect(trip?.pinnedDecisions).toEqual([]);
+    expect(trip?.mapPins).toEqual([]);
     expect(trip?.title).toBe("Legacy Trip");
   });
 
-  it("loads legacy v1 data and saves the migrated v2 key", () => {
+  it("loads legacy v2 data and saves the migrated v3 key", () => {
     const localStorage = installLocalStorage();
     localStorage.setItem(LEGACY_TRIP_STORAGE_KEY, JSON.stringify(legacyTrip));
 
@@ -67,5 +72,16 @@ describe("local storage migration", () => {
       TRIP_STORAGE_KEY,
       expect.stringContaining('"pacePreference":"balanced"'),
     );
+  });
+
+  it("loads legacy v1 data when no v2 trip exists", () => {
+    const localStorage = installLocalStorage();
+    localStorage.setItem(INITIAL_TRIP_STORAGE_KEY, JSON.stringify(legacyTrip));
+
+    const result = loadStoredTrip();
+
+    expect(result.trip?.id).toBe("legacy-trip");
+    expect(result.trip?.packingItems).toEqual([]);
+    expect(result.error).toBeNull();
   });
 });

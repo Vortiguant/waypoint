@@ -10,6 +10,25 @@ const activityCategorySchema = z.enum([
 ]);
 
 const pacePreferenceSchema = z.enum(["relaxed", "balanced", "packed"]);
+const packingCategorySchema = z.enum([
+  "clothing",
+  "documents",
+  "health",
+  "electronics",
+  "comfort",
+  "other",
+]);
+const tripDocumentStatusSchema = z.enum(["missing", "needed", "ready"]);
+const tripDecisionStatusSchema = z.enum(["open", "decided", "watch"]);
+const mapPinCategorySchema = z.enum([
+  "arrival",
+  "stay",
+  "food",
+  "activity",
+  "transfer",
+  "errand",
+  "other",
+]);
 
 const optionalDateSchema = z
   .string()
@@ -55,6 +74,35 @@ const tripDaySchema = z.object({
   activities: z.array(activitySchema),
 });
 
+const packingItemSchema = z.object({
+  id: z.string().min(1),
+  label: z.string().min(1),
+  category: packingCategorySchema.default("other"),
+  packed: z.boolean().default(false),
+});
+
+const tripDocumentSchema = z.object({
+  id: z.string().min(1),
+  label: z.string().min(1),
+  status: tripDocumentStatusSchema.default("needed"),
+  notes: z.string().optional().default(""),
+});
+
+const pinnedDecisionSchema = z.object({
+  id: z.string().min(1),
+  title: z.string().min(1),
+  status: tripDecisionStatusSchema.default("open"),
+  notes: z.string().optional().default(""),
+});
+
+const mapPinSchema = z.object({
+  id: z.string().min(1),
+  title: z.string().min(1),
+  location: z.string().min(1),
+  category: mapPinCategorySchema.default("other"),
+  dayId: z.string().or(z.literal("")).optional(),
+});
+
 export const tripSchema = z.object({
   id: z.string(),
   title: z.string(),
@@ -66,6 +114,10 @@ export const tripSchema = z.object({
   budgetTarget: z.coerce.number().min(0).optional(),
   pacePreference: pacePreferenceSchema.default("balanced"),
   planningNotes: z.string().optional().default(""),
+  packingItems: z.array(packingItemSchema).default([]),
+  documents: z.array(tripDocumentSchema).default([]),
+  pinnedDecisions: z.array(pinnedDecisionSchema).default([]),
+  mapPins: z.array(mapPinSchema).default([]),
   days: z.array(tripDaySchema),
   updatedAt: z.string(),
 });

@@ -9,6 +9,7 @@ import { ThemeToggle } from "@/components/layout/theme-toggle";
 
 const navItems = [
   { href: "/", label: "Explore" },
+  { href: "/workspace", label: "Workspace" },
   { href: "/destinations", label: "Destinations" },
   { href: "/itinerary", label: "Itineraries" },
   { href: "/budget", label: "Insights" },
@@ -97,7 +98,7 @@ export function MainNav() {
         </div>
       </nav>
 
-      <div className="grid grid-cols-4 border-t border-line bg-surface md:hidden">
+      <div className="grid grid-cols-5 border-t border-line bg-surface md:hidden">
         {navItems.map((item) => {
           const isActive = isActivePath(pathname, item.href);
 

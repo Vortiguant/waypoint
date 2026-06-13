@@ -1,8 +1,9 @@
 import type { Trip } from "@/types/travel";
 import { tripSchema } from "@/lib/validation/schemas";
 
-export const TRIP_STORAGE_KEY = "waypoint.trip.v2";
-export const LEGACY_TRIP_STORAGE_KEY = "waypoint.trip.v1";
+export const TRIP_STORAGE_KEY = "waypoint.trip.v3";
+export const LEGACY_TRIP_STORAGE_KEY = "waypoint.trip.v2";
+export const INITIAL_TRIP_STORAGE_KEY = "waypoint.trip.v1";
 
 function parseStoredTrip(raw: string | null): { trip: Trip | null; unreadable: boolean } {
   if (!raw) {
@@ -35,6 +36,13 @@ export function normalizeTrip(raw: unknown): Trip | null {
         : undefined,
     pacePreference: trip.pacePreference ?? "balanced",
     planningNotes: trip.planningNotes ?? "",
+    packingItems: trip.packingItems ?? [],
+    documents: trip.documents ?? [],
+    pinnedDecisions: trip.pinnedDecisions ?? [],
+    mapPins: (trip.mapPins ?? []).map((pin) => ({
+      ...pin,
+      dayId: pin.dayId || undefined,
+    })),
   };
 }
 
@@ -56,14 +64,25 @@ export function loadStoredTrip(): { trip: Trip | null; error: string | null } {
     return { trip: legacy.trip, error: null };
   }
 
-  if (current.unreadable || legacy.unreadable) {
+  const initial = parseStoredTrip(window.localStorage.getItem(INITIAL_TRIP_STORAGE_KEY));
+
+  if (initial.trip) {
+    window.localStorage.setItem(TRIP_STORAGE_KEY, JSON.stringify(initial.trip));
+    return { trip: initial.trip, error: null };
+  }
+
+  if (current.unreadable || legacy.unreadable || initial.unreadable) {
     return {
       trip: null,
       error: "Saved trip data could not be read, so Waypoint restored the sample trip.",
     };
   }
 
-  if (window.localStorage.getItem(TRIP_STORAGE_KEY) || window.localStorage.getItem(LEGACY_TRIP_STORAGE_KEY)) {
+  if (
+    window.localStorage.getItem(TRIP_STORAGE_KEY) ||
+    window.localStorage.getItem(LEGACY_TRIP_STORAGE_KEY) ||
+    window.localStorage.getItem(INITIAL_TRIP_STORAGE_KEY)
+  ) {
     return {
       trip: null,
       error: "Saved trip data was out of date, so Waypoint restored the sample trip.",

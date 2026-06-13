@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Minus, Plus, Share2, UsersRound } from "lucide-react";
 import { BudgetCategoryList } from "@/components/budget/budget-category-list";
 import { BudgetSummaryCard } from "@/components/budget/budget-summary-card";
@@ -82,6 +83,12 @@ export function BudgetDashboard() {
               <span className="grid size-10 place-items-center rounded-lg border-2 border-surface bg-panel text-xs font-bold text-ink">JW</span>
               <span className="grid size-10 place-items-center rounded-lg border-2 border-surface bg-panel text-xs font-bold text-muted">+2</span>
             </div>
+            <Link
+              href="/workspace"
+              className="inline-flex min-h-11 items-center justify-center rounded-lg border border-line bg-surface px-5 py-2.5 text-sm font-bold text-ink transition hover:-translate-y-px hover:border-accent hover:bg-panel focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent dark:bg-panel dark:hover:bg-surface"
+            >
+              Workspace
+            </Link>
             <Button type="button" variant="secondary" className="gap-2" onClick={shareDashboard}>
               <Share2 className="size-4" aria-hidden="true" />
               Share Dashboard

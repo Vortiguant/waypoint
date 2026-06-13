@@ -12,6 +12,77 @@ export const mockTrip: Trip = {
   pacePreference: "balanced",
   planningNotes:
     "Pack comfortable walking shoes for the Philosopher's Path and leave enough space for a quiet tea stop after Arashiyama.",
+  packingItems: [
+    {
+      id: "pack-1",
+      label: "Comfortable walking shoes",
+      category: "clothing",
+      packed: true,
+    },
+    {
+      id: "pack-2",
+      label: "Portable battery pack",
+      category: "electronics",
+      packed: false,
+    },
+    {
+      id: "pack-3",
+      label: "Small umbrella",
+      category: "comfort",
+      packed: false,
+    },
+  ],
+  documents: [
+    {
+      id: "doc-1",
+      label: "Passport",
+      status: "ready",
+      notes: "Valid through 2030.",
+    },
+    {
+      id: "doc-2",
+      label: "Ryokan confirmation",
+      status: "needed",
+      notes: "Save offline before departure.",
+    },
+  ],
+  pinnedDecisions: [
+    {
+      id: "decision-1",
+      title: "Keep Fushimi Inari as sunrise plan",
+      status: "decided",
+      notes: "Worth the early start for quieter paths.",
+    },
+    {
+      id: "decision-2",
+      title: "Choose final kaiseki seating",
+      status: "open",
+      notes: "Ask whether counter seating is available.",
+    },
+  ],
+  mapPins: [
+    {
+      id: "pin-1",
+      title: "Ryokan check-in",
+      location: "Higashiyama",
+      category: "stay",
+      dayId: "day-1",
+    },
+    {
+      id: "pin-2",
+      title: "Fushimi Inari gate trail",
+      location: "Fushimi Inari Taisha",
+      category: "activity",
+      dayId: "day-2",
+    },
+    {
+      id: "pin-3",
+      title: "Souvenir ceramics studio",
+      location: "Saga-Toriimoto",
+      category: "errand",
+      dayId: "day-3",
+    },
+  ],
   updatedAt: "2026-06-10T00:00:00.000Z",
   days: [
     {

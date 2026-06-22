@@ -37,7 +37,7 @@ export function DayColumn({
   return (
     <section className="grid gap-5 md:grid-cols-[7rem_1fr]">
       <div className="md:pt-2">
-        <p className="editorial-label text-accent">{day.dateLabel}</p>
+        <p className="text-sm font-semibold text-accent">{day.dateLabel}</p>
         <h2 className="mt-2 font-serif text-3xl font-semibold leading-tight tracking-[-0.02em] text-ink">
           {day.title}
         </h2>

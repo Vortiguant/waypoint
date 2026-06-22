@@ -9,7 +9,7 @@ The current UI follows a warm editorial travel system: generated destination pho
 - Editorial landing page with generated travel imagery and local newsletter validation
 - Destination explorer with client-side search, filtering, sorting, and clear filters
 - Destination detail pages with narrative content, local inquiry validation, and saved stays/destinations
-- Trip workspace command center with readiness scoring, next actions, pinned decisions, packing, documents, and map-context pins
+- Trip workspace command center with readiness scoring, next actions, pinned decisions, packing, documents, and spatial anchors
 - Day-by-day itinerary builder with add, edit, delete, undo delete, reorder, and move controls
 - Editable trip settings for title, destination, dates, travelers, currency, budget target, pace, and notes
 - Schedule conflict detection for overlapping timed activities
@@ -23,7 +23,7 @@ The current UI follows a warm editorial travel system: generated destination pho
 
 Waypoint V1 does not use accounts, auth, server persistence, network email, or calendar sync. Browser storage is used for:
 
-- Trip state: `waypoint.trip.v3`
+- Trip state: `waypoint.trip.v3` (accepts legacy `mapPins` field during normalization; persisted trips use `spatialAnchors`)
 - Legacy trip migration from `waypoint.trip.v2` and `waypoint.trip.v1`
 - Saved destinations and stays
 - Theme preference
@@ -68,7 +68,7 @@ npm run start     # Start the production server
 ## Routes
 
 - `/` — editorial destination landing and dispatch signup
-- `/workspace` — trip readiness, next actions, packing, documents, pinned decisions, and map context
+- `/workspace` — trip readiness, next actions, packing, documents, pinned decisions, and spatial anchors
 - `/destinations` — destination search, filtering, sorting, and saved-state entry points
 - `/destinations/[id]` — destination story, inquiry form, and recommended stays
 - `/itinerary` — local trip settings, timeline planner, activity editor, calendar export, and share
@@ -104,7 +104,7 @@ The unit tests cover:
 - Schedule conflict detection
 - Trip insights scoring and recommendations
 - v1/v2 to v3 local storage migration
-- Workspace readiness, next actions, and map pin grouping
+- Workspace readiness, next actions, and spatial anchor grouping
 - Calendar export behavior
 - Share summary generation
 

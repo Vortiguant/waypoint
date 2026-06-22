@@ -18,7 +18,15 @@ function parseStoredTrip(raw: string | null): { trip: Trip | null; unreadable: b
 }
 
 export function normalizeTrip(raw: unknown): Trip | null {
-  const result = tripSchema.safeParse(raw);
+  const rawRecord =
+    raw && typeof raw === "object" ? ({ ...(raw as Record<string, unknown>) } as Record<string, unknown>) : null;
+
+  if (rawRecord && !rawRecord.spatialAnchors && Array.isArray(rawRecord.mapPins)) {
+    rawRecord.spatialAnchors = rawRecord.mapPins;
+    delete rawRecord.mapPins;
+  }
+
+  const result = tripSchema.safeParse(rawRecord ?? raw);
 
   if (!result.success) {
     return null;
@@ -39,9 +47,9 @@ export function normalizeTrip(raw: unknown): Trip | null {
     packingItems: trip.packingItems ?? [],
     documents: trip.documents ?? [],
     pinnedDecisions: trip.pinnedDecisions ?? [],
-    mapPins: (trip.mapPins ?? []).map((pin) => ({
-      ...pin,
-      dayId: pin.dayId || undefined,
+    spatialAnchors: (trip.spatialAnchors ?? []).map((anchor) => ({
+      ...anchor,
+      dayId: anchor.dayId || undefined,
     })),
   };
 }

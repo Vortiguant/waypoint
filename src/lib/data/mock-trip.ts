@@ -60,7 +60,7 @@ export const mockTrip: Trip = {
       notes: "Ask whether counter seating is available.",
     },
   ],
-  mapPins: [
+  spatialAnchors: [
     {
       id: "pin-1",
       title: "Ryokan check-in",

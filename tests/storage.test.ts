@@ -56,8 +56,32 @@ describe("local storage migration", () => {
     expect(trip?.packingItems).toEqual([]);
     expect(trip?.documents).toEqual([]);
     expect(trip?.pinnedDecisions).toEqual([]);
-    expect(trip?.mapPins).toEqual([]);
+    expect(trip?.spatialAnchors).toEqual([]);
     expect(trip?.title).toBe("Legacy Trip");
+  });
+
+  it("migrates legacy mapPins field to spatialAnchors", () => {
+    const trip = normalizeTrip({
+      ...legacyTrip,
+      mapPins: [
+        {
+          id: "pin-1",
+          title: "Hotel",
+          location: "Higashiyama",
+          category: "stay",
+        },
+      ],
+    });
+
+    expect(trip?.spatialAnchors).toEqual([
+      {
+        id: "pin-1",
+        title: "Hotel",
+        location: "Higashiyama",
+        category: "stay",
+        dayId: undefined,
+      },
+    ]);
   });
 
   it("loads legacy v2 data and saves the migrated v3 key", () => {

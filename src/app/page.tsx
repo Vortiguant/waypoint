@@ -1,5 +1,6 @@
 import { FeatureGrid } from "@/components/marketing/feature-grid";
 import { Hero } from "@/components/marketing/hero";
+import { StickyScrollGallery } from "@/components/ui/sticky-scroll";
 import { TripPreview } from "@/components/marketing/trip-preview";
 
 export default function Home() {
@@ -7,6 +8,7 @@ export default function Home() {
     <>
       <Hero />
       <FeatureGrid />
+      <StickyScrollGallery />
       <TripPreview />
     </>
   );

@@ -33,7 +33,7 @@ export default async function DestinationDetailPage({
           sizes="100vw"
           className="motion-hero-media object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/72 via-black/18 to-black/5" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/56 to-black/24" />
         <div className="relative mx-auto flex min-h-[32rem] max-w-7xl flex-col justify-end px-4 pb-14 pt-20 sm:px-6 md:min-h-[38rem] md:pb-20 lg:px-8">
           <Link
             href="/destinations"
@@ -42,11 +42,11 @@ export default async function DestinationDetailPage({
             <ArrowLeft className="size-4" aria-hidden="true" />
             Destinations
           </Link>
-          <div className="motion-hero-copy max-w-3xl text-white">
+          <div className="motion-hero-copy max-w-3xl rounded-2xl bg-black/68 p-5 text-white sm:p-6">
             <p className="mb-5 inline-flex rounded-lg border border-white/25 bg-white/12 px-3 py-1 text-xs font-bold">
               {destination.region}, {destination.country}
             </p>
-            <h1 className="font-serif text-5xl font-semibold leading-[1.02] tracking-[-0.025em] md:text-7xl">
+            <h1 className="font-serif text-5xl font-semibold leading-[1.04] tracking-[-0.02em] md:text-6xl">
               {destination.editorialTitle}
             </h1>
             <p className="mt-6 max-w-2xl text-base font-medium leading-8 text-white/90 md:text-lg">
@@ -64,7 +64,7 @@ export default async function DestinationDetailPage({
           <div className="space-y-14">
             <div>
               <h2 className="font-serif text-4xl font-semibold leading-tight tracking-[-0.02em] text-ink md:text-5xl">
-                About the Craft
+                About this destination
               </h2>
               <p className="mt-7 max-w-[70ch] text-base leading-8 text-muted md:text-lg">
                 {destination.detailDescription}
@@ -82,7 +82,7 @@ export default async function DestinationDetailPage({
                       {String(index + 1).padStart(2, "0")}
                     </span>
                     <div>
-                      <p className="editorial-label text-accent">{decision.label}</p>
+                      <p className="text-sm font-semibold text-accent">{decision.label}</p>
                       <h4 className="mt-2 text-lg font-bold text-ink">{decision.title}</h4>
                       <p className="mt-2 max-w-2xl text-sm leading-7 text-muted">
                         {decision.description}
@@ -94,11 +94,14 @@ export default async function DestinationDetailPage({
             </div>
           </div>
 
-          <aside className="motion-panel h-fit rounded-2xl border border-line bg-panel-raised p-5 editorial-shadow lg:sticky lg:top-28">
-            <h2 className="font-serif text-2xl font-semibold text-ink">Plan Your Sojourn</h2>
+          <aside className="motion-panel h-fit rounded-2xl border border-line bg-panel-raised p-5 lg:sticky lg:top-28">
+            <h2 className="font-serif text-2xl font-semibold text-ink">Send a trip inquiry</h2>
+            <p className="mt-2 text-sm leading-6 text-muted">
+              Save dates and requests locally. Nothing is emailed—use this as a draft before you plan in the workspace.
+            </p>
             <DestinationInquiryForm destinationName={destination.name} />
-            <p className="mt-5 text-center text-xs italic leading-5 text-muted">
-              Our lead times are currently 72 hours for custom itineraries.
+            <p className="mt-5 text-center text-xs leading-5 text-muted">
+              Saved inquiries stay on this device until you clear browser storage.
             </p>
           </aside>
         </div>
@@ -112,7 +115,7 @@ export default async function DestinationDetailPage({
                 Recommended Stays
               </h2>
               <p className="mt-3 text-sm leading-6 text-muted">
-                Curated sanctuaries that prioritize architecture and silence.
+                Stays that match the pace and budget of this route.
               </p>
             </div>
             <Link href="/destinations" className="hidden min-h-11 items-center text-sm font-bold text-accent hover:text-ink sm:inline-flex">

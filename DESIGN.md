@@ -42,7 +42,7 @@ Use local production images under `public/images/editorial/`. Images should be s
 
 ## Brand Mark
 
-Waypoint uses a generated raster compass-map mark for browser icons and the website header. The canonical transparent source is `public/images/brand/waypoint-logo.png`; derived browser assets live at `public/favicon.ico`, `public/favicon-16x16.png`, `public/favicon-32x32.png`, `public/apple-touch-icon.png`, `public/icon.png`, `public/icon-192.png`, and `public/icon-512.png`.
+Waypoint uses a generated compass-map mark for browser icons and the website header. When raster assets are present, the canonical transparent source is `public/images/brand/waypoint-logo.png`; derived browser assets live at `public/favicon.ico`, `public/favicon-16x16.png`, `public/favicon-32x32.png`, `public/apple-touch-icon.png`, `public/icon.png`, `public/icon-192.png`, and `public/icon-512.png`. The in-app header uses `BrandLogo` (`src/components/layout/brand-logo.tsx`), an inline SVG compass mark paired with the Fraunces wordmark.
 
 The mark should remain paired with the Fraunces text wordmark in primary navigation. Do not recolor it casually; it carries the sienna, ink, and ivory palette for the brand.
 
@@ -88,7 +88,7 @@ Current editorial assets:
 ## Route Patterns
 
 - `/`: editorial landing with hero narrative, image-led destination grid, dispatch signup, and footer.
-- `/workspace`: local-first command center with readiness scoring, next actions, packing, documents, pinned decisions, and map-context pins.
+- `/workspace`: local-first command center with readiness scoring, next actions, packing, documents, pinned decisions, and spatial anchors.
 - `/destinations`: searchable editorial browser retaining filter and sort behavior.
 - `/destinations/[id]`: destination feature story with hero image, narrative, top decisions, inquiry panel, and stays.
 - `/itinerary`: timeline planner preserving add, edit, delete, reorder, move, reset, conflict detection, and hydration notices.
@@ -98,6 +98,6 @@ Current editorial assets:
 
 Trip prep data lives in the same local trip object as itinerary and budget state. The current storage key is `waypoint.trip.v3`, migrated from `waypoint.trip.v2` and `waypoint.trip.v1`.
 
-- Packing, document, decision, and map-pin controls should use inline editing rather than modal-heavy workflows.
+- Packing, document, decision, and spatial-anchor controls should use inline editing rather than modal-heavy workflows.
 - Readiness and next actions must stay deterministic and explainable.
-- Map context is a static planning board, not a live map API.
+- Spatial anchors are a static planning board for practical geography.

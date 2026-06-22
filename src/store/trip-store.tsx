@@ -12,7 +12,7 @@ import { reorderActivity } from "@/lib/itinerary/reorder";
 import { loadStoredTrip, saveStoredTrip } from "@/lib/storage/local-storage";
 import type {
   Activity,
-  MapPin,
+  SpatialAnchor,
   PackingItem,
   PinnedDecision,
   Trip,
@@ -51,9 +51,9 @@ type TripAction =
   | { type: "addPinnedDecision"; decision: PinnedDecision }
   | { type: "updatePinnedDecision"; decision: PinnedDecision }
   | { type: "deletePinnedDecision"; decisionId: string }
-  | { type: "addMapPin"; pin: MapPin }
-  | { type: "updateMapPin"; pin: MapPin }
-  | { type: "deleteMapPin"; pinId: string }
+  | { type: "addSpatialAnchor"; anchor: SpatialAnchor }
+  | { type: "updateSpatialAnchor"; anchor: SpatialAnchor }
+  | { type: "deleteSpatialAnchor"; anchorId: string }
   | { type: "setTravelers"; travelers: number }
   | { type: "resetTrip" };
 
@@ -252,20 +252,22 @@ function tripReducer(trip: Trip, action: TripAction): Trip {
           (decision) => decision.id !== action.decisionId,
         ),
       });
-    case "addMapPin":
+    case "addSpatialAnchor":
       return withTimestamp({
         ...trip,
-        mapPins: [...trip.mapPins, action.pin],
+        spatialAnchors: [...trip.spatialAnchors, action.anchor],
       });
-    case "updateMapPin":
+    case "updateSpatialAnchor":
       return withTimestamp({
         ...trip,
-        mapPins: trip.mapPins.map((pin) => (pin.id === action.pin.id ? action.pin : pin)),
+        spatialAnchors: trip.spatialAnchors.map((anchor) =>
+          anchor.id === action.anchor.id ? action.anchor : anchor,
+        ),
       });
-    case "deleteMapPin":
+    case "deleteSpatialAnchor":
       return withTimestamp({
         ...trip,
-        mapPins: trip.mapPins.filter((pin) => pin.id !== action.pinId),
+        spatialAnchors: trip.spatialAnchors.filter((anchor) => anchor.id !== action.anchorId),
       });
     case "setTravelers":
       return withTimestamp({ ...trip, travelers: Math.max(1, action.travelers) });

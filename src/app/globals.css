@@ -59,7 +59,7 @@
   --panel: oklch(0.235 0.015 54);
   --panel-raised: oklch(0.205 0.014 54);
   --ink: oklch(0.94 0.006 63);
-  --muted: oklch(0.74 0.016 63);
+  --muted: oklch(0.78 0.016 63);
   --soft: oklch(0.62 0.016 63);
   --line: oklch(0.36 0.018 54);
   --accent: oklch(0.72 0.095 58);
@@ -86,8 +86,10 @@ body {
     linear-gradient(180deg, color-mix(in oklch, var(--accent-soft) 34%, transparent), transparent 26rem),
     var(--canvas);
   color: var(--ink);
+  line-height: 1.5;
   font-kerning: normal;
-  text-rendering: geometricPrecision;
+  font-optical-sizing: auto;
+  text-rendering: optimizeLegibility;
 }
 
 ::selection {
@@ -98,6 +100,7 @@ body {
 h1,
 h2,
 h3 {
+  letter-spacing: -0.02em;
   text-wrap: balance;
 }
 
@@ -113,14 +116,11 @@ img {
   max-width: 100%;
 }
 
-.editorial-shadow {
-  box-shadow: var(--shadow-soft);
-}
-
 .editorial-label {
   font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
+  font-weight: 800;
+  letter-spacing: 0.11em;
+  line-height: 1.35;
   text-transform: uppercase;
 }
 
@@ -197,8 +197,8 @@ img {
 }
 
 .motion-budget-bar {
-  animation: budget-meter 640ms var(--ease-out-expo) both;
   transform-origin: left center;
+  transition: transform 500ms var(--ease-out);
 }
 
 .motion-timeline-node {
@@ -256,14 +256,6 @@ img {
   }
 }
 
-@keyframes budget-meter {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
-  }
-}
 
 @media (prefers-reduced-motion: reduce) {
   *,

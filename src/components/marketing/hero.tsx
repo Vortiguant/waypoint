@@ -16,15 +16,15 @@ export function Hero() {
         sizes="100vw"
         className="motion-hero-media object-cover"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/78 via-black/34 to-black/10" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/92 via-black/64 to-black/32" />
       <div className="relative mx-auto flex min-h-[32rem] max-w-7xl flex-col justify-end">
-        <div className="motion-hero-copy max-w-3xl pb-4">
-          <p className="editorial-label text-white/78">Curated narratives</p>
+        <div className="motion-hero-copy max-w-3xl rounded-2xl bg-black/68 p-5 sm:p-6">
+          <p className="editorial-label text-white">Curated narratives</p>
           <h1 className="mt-5 max-w-3xl font-serif text-5xl font-semibold leading-[1.02] tracking-[-0.025em] text-white sm:text-6xl lg:text-7xl">
             Editorial travel planning for considered routes.
           </h1>
-          <p className="mt-7 max-w-2xl text-base font-medium leading-8 text-white/88 md:text-lg">
-            Moving beyond the destination, Waypoint curates experiences that honor the craft of exploration. From hidden coastal retreats to architectural wonders, shape your next chapter with evidence and calm.
+          <p className="mt-7 max-w-2xl text-base font-medium leading-8 text-white/90 md:text-lg">
+            Compare destinations, build day-by-day itineraries, and track budget and logistics in one calm planner—without accounts or backend sync.
           </p>
           <div className="mt-10 flex flex-col gap-3 sm:flex-row">
             <Link href="/destinations">
@@ -42,7 +42,7 @@ export function Hero() {
             {["Architecture", "Coastal", "Culinary", "Slow Living"].map((item) => (
               <span
                 key={item}
-                className="rounded-lg border border-white/24 bg-black/20 px-3 py-1.5 text-xs font-semibold text-white/82"
+                className="rounded-lg border border-white/35 bg-black/35 px-3 py-1.5 text-xs font-bold text-white"
               >
                 {item}
               </span>

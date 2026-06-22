@@ -55,11 +55,11 @@ export function ActivityCard({
   }
 
   return (
-    <article className={`motion-panel rounded-2xl border p-5 editorial-shadow ${tone}`}>
+    <article className={`motion-panel rounded-2xl border p-5 ${tone}`}>
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
-            <p className={hasConflict ? "editorial-label text-danger" : "editorial-label text-positive"}>
+            <p className={hasConflict ? "text-xs font-bold text-danger" : "text-xs font-bold text-positive"}>
               {activity.startTime && activity.endTime
                 ? `${activity.startTime} - ${hasConflict ? "Scheduling conflict" : "Confirmed"}`
                 : "Flexible time"}
@@ -107,7 +107,7 @@ export function ActivityCard({
       </div>
 
       {showMoreActions ? (
-        <div className="motion-status mt-3 flex flex-wrap gap-2 rounded-lg border border-line bg-panel p-2">
+        <div className="motion-status mt-3 flex flex-wrap gap-2 border-t border-line pt-3">
           <Button type="button" variant="ghost" className="gap-1 px-3 py-1.5 text-xs" disabled={index === 0} onClick={() => onReorder("up")}>
             <GripVertical className="size-3" aria-hidden="true" /> Move up
           </Button>

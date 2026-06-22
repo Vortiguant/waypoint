@@ -26,7 +26,7 @@ function InsightPanel({ insight }: { insight: InsightScore }) {
     <article className="motion-panel rounded-2xl border border-line bg-panel-raised p-5">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="editorial-label text-muted">{insight.label}</p>
+          <p className="text-sm font-bold text-ink">{insight.label}</p>
           <p className="mt-2 text-sm leading-6 text-muted">{insight.detail}</p>
         </div>
         <span className={`rounded-lg border px-3 py-2 text-sm font-bold ${scoreTone(insight.status)}`}>
@@ -69,8 +69,8 @@ export function BudgetDashboard() {
       <div className="mx-auto max-w-7xl">
         <div className="mb-10 grid gap-6 md:grid-cols-[1fr_auto] md:items-end">
           <div>
-            <p className="editorial-label text-accent">Trip decisions</p>
-            <h1 className="mt-3 font-serif text-5xl font-semibold leading-[1.02] tracking-[-0.025em] text-ink md:text-6xl">
+            <p className="text-sm font-semibold text-accent">Trip insights</p>
+            <h1 className="mt-3 font-serif text-4xl font-semibold leading-[1.08] tracking-[-0.02em] text-ink md:text-5xl">
               {trip.title} insights
             </h1>
             <p className="mt-4 max-w-2xl text-base leading-8 text-muted">
@@ -123,8 +123,8 @@ export function BudgetDashboard() {
 
           <aside className="space-y-5">
             <section className="motion-panel rounded-2xl border border-accent bg-accent p-6 text-accent-ink">
-              <p className="font-serif text-3xl font-semibold">Value Score</p>
-              <p className="mt-6 font-serif text-7xl font-semibold leading-none tracking-[-0.03em]">
+              <p className="text-2xl font-bold tracking-[-0.01em]">Value Score</p>
+              <p className="mt-5 text-6xl font-extrabold leading-none tracking-[-0.02em] tabular-nums">
                 {insights.valueScore.score}
               </p>
               <p className="mt-5 text-base font-medium leading-7 opacity-90">
@@ -140,10 +140,10 @@ export function BudgetDashboard() {
             </section>
 
             <section className="motion-panel rounded-2xl border border-line bg-panel-raised p-5">
-              <p className="editorial-label text-accent">Recommendations</p>
-              <div className="mt-4 space-y-4">
+              <p className="text-sm font-bold text-accent">Recommendations</p>
+              <div className="mt-4 divide-y divide-line">
                 {insights.recommendations.map((item) => (
-                  <article key={item.id} className="rounded-lg border border-line bg-surface p-4">
+                  <article key={item.id} className="py-4 first:pt-0 last:pb-0">
                     <p className="font-bold text-ink">{item.title}</p>
                     <p className="mt-1 text-sm leading-6 text-muted">{item.description}</p>
                   </article>
@@ -165,7 +165,7 @@ export function BudgetDashboard() {
                 />
               </div>
               <div className="p-5">
-                <p className="editorial-label text-accent">Travelers</p>
+                <p className="text-sm font-bold text-accent">Travelers</p>
                 <div className="mt-3 flex items-center justify-between gap-3">
                   <div className="inline-flex items-center gap-2 text-2xl font-bold text-ink">
                     <UsersRound className="size-5 text-accent" aria-hidden="true" />

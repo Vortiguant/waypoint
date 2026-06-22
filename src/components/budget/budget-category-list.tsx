@@ -20,8 +20,8 @@ export function BudgetCategoryList({ summary, currency }: { summary: BudgetSumma
     <Card className="p-6 md:p-8">
       <div className="flex flex-col gap-3 border-b border-line pb-5 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="editorial-label text-accent">Allocation</p>
-          <h2 className="mt-2 font-serif text-3xl font-semibold tracking-[-0.02em] text-ink">
+          <p className="text-sm font-bold text-accent">Allocation</p>
+          <h2 className="mt-2 font-serif text-2xl font-semibold tracking-[-0.02em] text-ink md:text-3xl">
             Where the money goes
           </h2>
         </div>
@@ -30,7 +30,7 @@ export function BudgetCategoryList({ summary, currency }: { summary: BudgetSumma
 
       <div className="mt-7 space-y-7">
         {summary.byCategory.map((item) => {
-          const width = `${Math.max(3, (item.total / largest) * 100)}%`;
+          const scale = Math.max(0.03, item.total / largest);
           const { label, Icon } = categoryMeta[item.category];
 
           return (
@@ -45,7 +45,7 @@ export function BudgetCategoryList({ summary, currency }: { summary: BudgetSumma
                 </span>
               </div>
               <div className="h-3 overflow-hidden rounded-lg bg-panel">
-                <div className="motion-budget-bar h-full rounded-lg bg-accent transition-[width] duration-500 ease-[var(--ease-out)]" style={{ width }} />
+                <div className="motion-budget-bar h-full w-full origin-left rounded-lg bg-accent" style={{ transform: `scaleX(${scale})` }} />
               </div>
             </div>
           );

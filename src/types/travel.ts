@@ -22,7 +22,7 @@ export type TripDocumentStatus = "missing" | "needed" | "ready";
 
 export type TripDecisionStatus = "open" | "decided" | "watch";
 
-export type MapPinCategory =
+export type SpatialAnchorCategory =
   | "arrival"
   | "stay"
   | "food"
@@ -108,11 +108,11 @@ export type PinnedDecision = {
   notes?: string;
 };
 
-export type MapPin = {
+export type SpatialAnchor = {
   id: string;
   title: string;
   location: string;
-  category: MapPinCategory;
+  category: SpatialAnchorCategory;
   dayId?: string;
 };
 
@@ -130,7 +130,7 @@ export type Trip = {
   packingItems: PackingItem[];
   documents: TripDocument[];
   pinnedDecisions: PinnedDecision[];
-  mapPins: MapPin[];
+  spatialAnchors: SpatialAnchor[];
   days: TripDay[];
   updatedAt: string;
 };
@@ -208,7 +208,7 @@ export type TripReadiness = {
     totalDocuments: number;
     decidedPinnedDecisions: number;
     totalPinnedDecisions: number;
-    mapPins: number;
+    spatialAnchors: number;
     conflicts: number;
   };
 };
@@ -221,8 +221,8 @@ export type TripNextAction = {
   href?: string;
 };
 
-export type GroupedMapPins = {
+export type GroupedSpatialAnchors = {
   label: string;
   dayId?: string;
-  pins: MapPin[];
+  anchors: SpatialAnchor[];
 };

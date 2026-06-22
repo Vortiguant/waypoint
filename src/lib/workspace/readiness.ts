@@ -2,10 +2,10 @@ import { calculateTripInsights } from "@/lib/insights/calculate";
 import { findScheduleConflicts } from "@/lib/itinerary/conflicts";
 import type {
   Destination,
-  GroupedMapPins,
+  GroupedSpatialAnchors,
   InsightScore,
   InsightStatus,
-  MapPin,
+  SpatialAnchor,
   Trip,
   TripNextAction,
   TripReadiness,
@@ -82,7 +82,7 @@ export function calculateTripReadiness(
   const packingScore = percentScore(packedItems, trip.packingItems.length);
   const documentScore = percentScore(readyDocuments, trip.documents.length);
   const decisionScore = percentScore(decidedPinnedDecisions, trip.pinnedDecisions.length);
-  const mapScore = trip.mapPins.length > 0 ? 10 : 4;
+  const anchorScore = trip.spatialAnchors.length > 0 ? 10 : 4;
   const budgetScore = insights.budgetHealth.score;
 
   const inputs: InsightScore[] = [
@@ -133,13 +133,13 @@ export function calculateTripReadiness(
       ],
     ),
     scoreInput(
-      "Map context",
-      mapScore,
-      `${trip.mapPins.length} map-context pins are attached to the plan.`,
+      "Spatial anchors",
+      anchorScore,
+      `${trip.spatialAnchors.length} spatial anchors are attached to the plan.`,
       [
-        trip.mapPins.length > 0
-          ? "Pins help connect errands, stays, transfers, and activities."
-          : "Add at least one pin to orient the trip.",
+        trip.spatialAnchors.length > 0
+          ? "Anchors help connect errands, stays, transfers, and activities."
+          : "Add at least one anchor to orient the trip.",
       ],
     ),
   ];
@@ -150,7 +150,7 @@ export function calculateTripReadiness(
       packingScore * 0.15 +
       documentScore * 0.15 +
       decisionScore * 0.15 +
-      mapScore * 0.1,
+      anchorScore * 0.1,
   );
 
   return {
@@ -158,7 +158,7 @@ export function calculateTripReadiness(
     status: statusFromScore(score),
     label: "Trip readiness",
     detail:
-      "Weighted from itinerary timing, budget target, packing, documents, pinned decisions, and map context.",
+      "Weighted from itinerary timing, budget target, packing, documents, pinned decisions, and spatial anchors.",
     inputs,
     counts: {
       packedItems,
@@ -167,7 +167,7 @@ export function calculateTripReadiness(
       totalDocuments: trip.documents.length,
       decidedPinnedDecisions,
       totalPinnedDecisions: trip.pinnedDecisions.length,
-      mapPins: trip.mapPins.length,
+      spatialAnchors: trip.spatialAnchors.length,
       conflicts: conflicts.length,
     },
   };
@@ -254,12 +254,12 @@ export function getTripNextActions(
     );
   }
 
-  if (trip.mapPins.length === 0) {
+  if (trip.spatialAnchors.length === 0) {
     actions.push(
       action(
-        "add-map-context",
+        "add-spatial-anchor",
         "info",
-        "Add map context",
+        "Add a spatial anchor",
         "Pin the stay, arrival point, or one errand so the trip has spatial anchors.",
       ),
     );
@@ -279,19 +279,19 @@ export function getTripNextActions(
   return actions.slice(0, 5);
 }
 
-export function groupPinsByDay(trip: Trip): GroupedMapPins[] {
-  const groups = new Map<string, { label: string; dayId?: string; pins: MapPin[] }>();
+export function groupSpatialAnchorsByDay(trip: Trip): GroupedSpatialAnchors[] {
+  const groups = new Map<string, { label: string; dayId?: string; anchors: SpatialAnchor[] }>();
 
   for (const day of trip.days) {
-    groups.set(day.id, { label: `${day.dateLabel}: ${day.title}`, dayId: day.id, pins: [] });
+    groups.set(day.id, { label: `${day.dateLabel}: ${day.title}`, dayId: day.id, anchors: [] });
   }
 
-  groups.set("unassigned", { label: "Unassigned pins", pins: [] });
+  groups.set("unassigned", { label: "Unassigned anchors", anchors: [] });
 
-  for (const pin of trip.mapPins) {
-    const key = pin.dayId && groups.has(pin.dayId) ? pin.dayId : "unassigned";
-    groups.get(key)?.pins.push(pin);
+  for (const anchor of trip.spatialAnchors) {
+    const key = anchor.dayId && groups.has(anchor.dayId) ? anchor.dayId : "unassigned";
+    groups.get(key)?.anchors.push(anchor);
   }
 
-  return [...groups.values()].filter((group) => group.pins.length > 0);
+  return [...groups.values()].filter((group) => group.anchors.length > 0);
 }

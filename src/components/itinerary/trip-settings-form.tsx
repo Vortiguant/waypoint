@@ -70,7 +70,7 @@ export function TripSettingsForm({
         aria-expanded={isOpen}
       >
         <span>
-          <span className="editorial-label text-accent">Trip settings</span>
+          <span className="text-sm font-semibold text-accent">Trip settings</span>
           <span className="mt-2 block font-serif text-2xl font-semibold text-ink">
             Dates, target, pace, and notes
           </span>
@@ -101,11 +101,11 @@ export function TripSettingsForm({
           }}
         >
           <label className="space-y-1.5">
-            <span className="editorial-label text-muted">Trip title</span>
+            <span className="text-sm font-semibold text-muted">Trip title</span>
             <Input value={values.title} onChange={(event) => update("title", event.target.value)} />
           </label>
           <label className="space-y-1.5">
-            <span className="editorial-label text-muted">Destination</span>
+            <span className="text-sm font-semibold text-muted">Destination</span>
             <Select
               value={values.destinationId}
               onChange={(event) => update("destinationId", event.target.value)}
@@ -118,7 +118,7 @@ export function TripSettingsForm({
             </Select>
           </label>
           <label className="space-y-1.5">
-            <span className="editorial-label text-muted">Start date</span>
+            <span className="text-sm font-semibold text-muted">Start date</span>
             <Input
               type="date"
               value={values.startDate}
@@ -126,7 +126,7 @@ export function TripSettingsForm({
             />
           </label>
           <label className="space-y-1.5">
-            <span className="editorial-label text-muted">End date</span>
+            <span className="text-sm font-semibold text-muted">End date</span>
             <Input
               type="date"
               value={values.endDate}
@@ -134,7 +134,7 @@ export function TripSettingsForm({
             />
           </label>
           <label className="space-y-1.5">
-            <span className="editorial-label text-muted">Travelers</span>
+            <span className="text-sm font-semibold text-muted">Travelers</span>
             <Input
               type="number"
               min="1"
@@ -143,7 +143,7 @@ export function TripSettingsForm({
             />
           </label>
           <label className="space-y-1.5">
-            <span className="editorial-label text-muted">Currency</span>
+            <span className="text-sm font-semibold text-muted">Currency</span>
             <Select value={values.currency} onChange={(event) => update("currency", event.target.value)}>
               <option value="USD">USD</option>
               <option value="EUR">EUR</option>
@@ -152,7 +152,7 @@ export function TripSettingsForm({
             </Select>
           </label>
           <label className="space-y-1.5">
-            <span className="editorial-label text-muted">Budget target</span>
+            <span className="text-sm font-semibold text-muted">Budget target</span>
             <Input
               type="number"
               min="0"
@@ -162,7 +162,7 @@ export function TripSettingsForm({
             />
           </label>
           <label className="space-y-1.5">
-            <span className="editorial-label text-muted">Pace</span>
+            <span className="text-sm font-semibold text-muted">Pace</span>
             <Select
               value={values.pacePreference}
               onChange={(event) => update("pacePreference", event.target.value as PacePreference)}
@@ -173,7 +173,7 @@ export function TripSettingsForm({
             </Select>
           </label>
           <label className="space-y-1.5 md:col-span-2">
-            <span className="editorial-label text-muted">Planning notes</span>
+            <span className="text-sm font-semibold text-muted">Planning notes</span>
             <textarea
               className="min-h-28 w-full rounded-lg border border-line bg-surface px-3.5 py-3 text-sm text-ink outline-none transition-[border-color,box-shadow,transform] duration-200 ease-[var(--ease-out)] placeholder:text-soft focus:-translate-y-px focus:border-accent focus:ring-2 focus:ring-accent/20 dark:bg-panel"
               value={values.planningNotes}

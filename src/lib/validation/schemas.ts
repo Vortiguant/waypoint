@@ -20,7 +20,7 @@ const packingCategorySchema = z.enum([
 ]);
 const tripDocumentStatusSchema = z.enum(["missing", "needed", "ready"]);
 const tripDecisionStatusSchema = z.enum(["open", "decided", "watch"]);
-const mapPinCategorySchema = z.enum([
+const spatialAnchorCategorySchema = z.enum([
   "arrival",
   "stay",
   "food",
@@ -95,11 +95,11 @@ const pinnedDecisionSchema = z.object({
   notes: z.string().optional().default(""),
 });
 
-const mapPinSchema = z.object({
+const spatialAnchorSchema = z.object({
   id: z.string().min(1),
   title: z.string().min(1),
   location: z.string().min(1),
-  category: mapPinCategorySchema.default("other"),
+  category: spatialAnchorCategorySchema.default("other"),
   dayId: z.string().or(z.literal("")).optional(),
 });
 
@@ -117,7 +117,7 @@ export const tripSchema = z.object({
   packingItems: z.array(packingItemSchema).default([]),
   documents: z.array(tripDocumentSchema).default([]),
   pinnedDecisions: z.array(pinnedDecisionSchema).default([]),
-  mapPins: z.array(mapPinSchema).default([]),
+  spatialAnchors: z.array(spatialAnchorSchema).default([]),
   days: z.array(tripDaySchema),
   updatedAt: z.string(),
 });

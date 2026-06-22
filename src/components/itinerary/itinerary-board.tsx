@@ -143,7 +143,7 @@ export function ItineraryBoard() {
                 <p className="editorial-label text-accent">
                   {destination ? `${destination.name}, ${destination.country}` : "Trip planner"}
                 </p>
-                <h1 className="mt-3 font-serif text-5xl font-semibold leading-[1.02] tracking-[-0.025em] text-ink md:text-6xl">
+                <h1 className="mt-3 font-serif text-4xl font-semibold leading-[1.08] tracking-[-0.02em] text-ink md:text-5xl">
                   {trip.title}
                 </h1>
                 <p className="mt-4 text-lg leading-7 text-muted">{dateRange}</p>
@@ -179,15 +179,15 @@ export function ItineraryBoard() {
               </div>
             </div>
 
-            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+            <div className="motion-panel mt-6 grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-3">
               {[
                 ["Days", trip.days.length],
                 ["Activities", totalActivities],
                 ["Conflicts", conflicts.length],
               ].map(([label, value]) => (
-                <div key={label} className="motion-panel rounded-2xl border border-line bg-panel-raised p-4">
-                  <p className="editorial-label text-muted">{label}</p>
-                  <p className="mt-2 font-serif text-4xl font-semibold text-ink">{value}</p>
+                <div key={label} className="bg-panel-raised p-4">
+                  <p className="text-sm font-semibold text-muted">{label}</p>
+                  <p className="mt-2 text-3xl font-extrabold tracking-[-0.02em] text-ink tabular-nums">{value}</p>
                 </div>
               ))}
             </div>
@@ -257,7 +257,7 @@ export function ItineraryBoard() {
             <section className="motion-panel overflow-hidden rounded-2xl border border-line bg-panel-raised">
               <div className="h-40 bg-[radial-gradient(circle_at_18%_18%,var(--accent-soft),transparent_34%),linear-gradient(135deg,var(--accent-soft),var(--panel),var(--soft))]" />
               <div className="p-6">
-                <h2 className="font-serif text-3xl font-semibold text-ink">Trip Logistics</h2>
+                <h2 className="font-serif text-2xl font-semibold tracking-[-0.02em] text-ink">Trip Logistics</h2>
                 <div className="mt-6 space-y-5">
                 {logistics.map(({ Icon, title, description }) => (
                     <div key={title} className="flex gap-4">
@@ -273,7 +273,7 @@ export function ItineraryBoard() {
             </section>
 
             <section className="motion-panel rounded-2xl border border-line bg-panel-raised p-6">
-              <p className="editorial-label text-accent">Planner notes</p>
+              <p className="text-sm font-bold text-accent">Planner notes</p>
               <blockquote className="mt-6 text-lg italic leading-8 text-ink">
                 &quot;{trip.planningNotes || "Add notes in trip settings to keep shared context close to the timeline."}&quot;
               </blockquote>

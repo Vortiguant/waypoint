@@ -33,7 +33,7 @@ export function DestinationInquiryForm({ destinationName }: { destinationName: s
       }}
     >
       <label className="block space-y-1.5">
-        <span className="editorial-label text-muted">Date range</span>
+        <span className="text-sm font-semibold text-muted">Date range</span>
         <div className="relative">
           <Input
             placeholder="Oct 14-21, 2026"
@@ -45,7 +45,7 @@ export function DestinationInquiryForm({ destinationName }: { destinationName: s
         </div>
       </label>
       <label className="block space-y-1.5">
-        <span className="editorial-label text-muted">Guest count</span>
+        <span className="text-sm font-semibold text-muted">Guest count</span>
         <Select value={travelers} onChange={(event) => setTravelers(event.target.value)}>
           <option value="1">1 traveler</option>
           <option value="2">2 travelers</option>
@@ -53,7 +53,7 @@ export function DestinationInquiryForm({ destinationName }: { destinationName: s
         </Select>
       </label>
       <label className="block space-y-1.5">
-        <span className="editorial-label text-muted">Specific requests</span>
+        <span className="text-sm font-semibold text-muted">Specific requests</span>
         <textarea
           className="min-h-28 w-full rounded-lg border border-line bg-surface px-3.5 py-3 text-sm text-ink outline-none transition-[border-color,box-shadow,transform] duration-200 ease-[var(--ease-out)] placeholder:text-soft focus:-translate-y-px focus:border-accent focus:ring-2 focus:ring-accent/20 dark:bg-panel"
           placeholder="Dietary needs, accessibility, or interests..."

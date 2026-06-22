@@ -7,7 +7,7 @@ export default function DestinationsPage() {
         <div className="grid gap-8 border-b border-line pb-10 lg:grid-cols-[0.82fr_1.18fr] lg:items-end">
           <div>
             <p className="editorial-label text-accent">Destination desk</p>
-            <h1 className="mt-4 max-w-3xl font-serif text-5xl font-semibold leading-[1.02] tracking-[-0.025em] text-ink md:text-6xl">
+            <h1 className="mt-4 max-w-3xl font-serif text-4xl font-semibold leading-[1.08] tracking-[-0.02em] text-ink md:text-5xl">
               Select the route by evidence and atmosphere.
             </h1>
           </div>

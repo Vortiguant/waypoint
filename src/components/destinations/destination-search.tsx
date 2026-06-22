@@ -68,31 +68,31 @@ export function DestinationSearch() {
       <section className="rounded-2xl border border-line bg-panel-raised p-4 md:p-5" aria-label="Destination filters">
         <div className="grid gap-3 lg:grid-cols-[minmax(18rem,1.4fr)_repeat(4,minmax(9rem,1fr))]">
           <label className="relative block space-y-1.5">
-            <span className="editorial-label text-muted">Search</span>
+            <span className="text-sm font-semibold text-muted">Search</span>
             <Search className="pointer-events-none absolute left-3.5 top-[2.55rem] size-4 text-muted" aria-hidden="true" />
             <Input className="pl-10" placeholder="Place, mood, or tag" value={query} onChange={(event) => setQuery(event.target.value)} />
           </label>
           <label className="space-y-1.5">
-            <span className="editorial-label text-muted">Region</span>
+            <span className="text-sm font-semibold text-muted">Region</span>
             <Select value={region} onChange={(event) => setRegion(event.target.value)}>
               <option value="all">All regions</option>
               {destinationRegions.map((item) => <option key={item} value={item}>{item}</option>)}
             </Select>
           </label>
           <label className="space-y-1.5">
-            <span className="editorial-label text-muted">Style</span>
+            <span className="text-sm font-semibold text-muted">Style</span>
             <Select value={style} onChange={(event) => setStyle(event.target.value)}>
               {styles.map((item) => <option key={item} value={item}>{item === "all" ? "All styles" : item}</option>)}
             </Select>
           </label>
           <label className="space-y-1.5">
-            <span className="editorial-label text-muted">Budget</span>
+            <span className="text-sm font-semibold text-muted">Budget</span>
             <Select value={budget} onChange={(event) => setBudget(event.target.value)}>
               {budgets.map((item) => <option key={item} value={item}>{formatBudgetLabel(item)}</option>)}
             </Select>
           </label>
           <label className="space-y-1.5">
-            <span className="editorial-label text-muted">Sort</span>
+            <span className="text-sm font-semibold text-muted">Sort</span>
             <Select value={sort} onChange={(event) => setSort(event.target.value)}>
               <option value="recommended">Top rated</option>
               <option value="price-low">Lowest cost</option>

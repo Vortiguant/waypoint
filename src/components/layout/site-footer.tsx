@@ -1,4 +1,12 @@
 import Link from "next/link";
+import { BrandLogo } from "@/components/layout/brand-logo";
+
+const footerLinks = [
+  { href: "/workspace", label: "Workspace" },
+  { href: "/destinations", label: "Destinations" },
+  { href: "/itinerary", label: "Itinerary" },
+  { href: "/budget", label: "Insights" },
+];
 
 export function SiteFooter() {
   return (
@@ -7,23 +15,24 @@ export function SiteFooter() {
         <div>
           <Link
             href="/"
-            className="inline-flex min-h-11 items-center font-serif text-4xl font-semibold leading-none tracking-[-0.02em] text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+            className="transition hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+            aria-label="Waypoint Travel Co. home"
           >
-            Waypoint
+            <BrandLogo compact />
           </Link>
           <p className="mt-4 max-w-sm text-sm leading-6 text-muted">
             Elevating travel planning through editorial precision and data clarity.
           </p>
         </div>
         <div className="flex flex-wrap gap-x-7 gap-y-3 text-sm text-muted md:justify-end">
-          {["Privacy Policy", "Terms of Service", "Contact", "Careers", "Press"].map((item) => (
-            <a
-              key={item}
-              href="#"
+          {footerLinks.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
               className="inline-flex min-h-11 items-center transition hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             >
-              {item}
-            </a>
+              {item.label}
+            </Link>
           ))}
         </div>
       </div>

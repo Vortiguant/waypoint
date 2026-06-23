@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { BedDouble, CalendarDays, Car, CloudSun, RotateCcw, Share2 } from "lucide-react";
+import { BedDouble, CalendarDays, Car, Clock, RotateCcw, Share2, TriangleAlert } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { Activity } from "@/types/travel";
 import { Button } from "@/components/ui/button";
@@ -25,6 +25,7 @@ export function ItineraryBoard() {
   const { trip, hasHydrated, storageError, dispatch } = useTrip();
   const [notice, setNotice] = useState<string | null>(null);
   const [lastDeleted, setLastDeleted] = useState<DeletedActivity | null>(null);
+  const [confirmingReset, setConfirmingReset] = useState(false);
   const conflicts = useMemo(() => findScheduleConflicts(trip.days), [trip.days]);
   const destination = useMemo(
     () => getDestinationById(trip.destinationId),
@@ -127,14 +128,40 @@ export function ItineraryBoard() {
         ? `Starting ${trip.startDate}`
         : "Dates not set";
 
+  const allActivities = trip.days.flatMap((day) => day.activities);
+  const lodgingStops = allActivities.filter((activity) => activity.category === "lodging");
+  const transportLegs = allActivities.filter((activity) => activity.category === "transport");
+  const timedActivities = allActivities.filter(
+    (activity) => activity.startTime && activity.endTime,
+  ).length;
   const logistics: Array<{ Icon: LucideIcon; title: string; description: string }> = [
-    { Icon: BedDouble, title: "Hoshinoya Kyoto", description: "Arashiyama, Kyoto" },
-    { Icon: Car, title: "Transport Pass", description: "JR West Rail Pass active" },
-    { Icon: CloudSun, title: "Weather Forecast", description: "18C / 12C - Mostly sunny" },
+    {
+      Icon: BedDouble,
+      title: lodgingStops.length === 1 ? "1 lodging stop" : `${lodgingStops.length} lodging stops`,
+      description: lodgingStops[0]?.location ?? "Add a lodging activity to track stays.",
+    },
+    {
+      Icon: Car,
+      title: transportLegs.length === 1 ? "1 transport leg" : `${transportLegs.length} transport legs`,
+      description: transportLegs[0]?.location ?? "Add transport activities to track connections.",
+    },
+    {
+      Icon: Clock,
+      title: `${timedActivities} of ${totalActivities} activities timed`,
+      description:
+        timedActivities === totalActivities
+          ? "Every activity has a start and end time."
+          : "Add times so readiness and conflicts stay accurate.",
+    },
   ];
+  const lastUpdatedLabel = new Date(trip.updatedAt).toLocaleString(undefined, {
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
+  const settingsIncomplete = !trip.startDate || !trip.budgetTarget || !trip.destinationId;
 
   return (
-    <section className="px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+    <section className="px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_28rem]">
           <div>
@@ -165,16 +192,23 @@ export function ItineraryBoard() {
                 </Button>
                 <Button
                   type="button"
-                  variant="secondary"
+                  variant={confirmingReset ? "danger" : "secondary"}
                   className="gap-2"
                   onClick={() => {
+                    if (!confirmingReset) {
+                      setConfirmingReset(true);
+                      showNotice("Click reset again to replace this trip with the sample trip.");
+                      return;
+                    }
+
+                    setConfirmingReset(false);
                     setLastDeleted(null);
                     dispatch({ type: "resetTrip" });
                     showNotice("Sample trip restored.");
                   }}
                 >
                   <RotateCcw className="size-4" aria-hidden="true" />
-                  Reset
+                  {confirmingReset ? "Confirm reset" : "Reset"}
                 </Button>
               </div>
             </div>
@@ -191,6 +225,20 @@ export function ItineraryBoard() {
                 </div>
               ))}
             </div>
+
+            {conflicts.length > 0 ? (
+              <div className="mt-5">
+                <StatusMessage tone="error">
+                  <span className="flex items-center gap-2 font-bold">
+                    <TriangleAlert className="size-4" aria-hidden="true" />
+                    {conflicts.length} scheduling {conflicts.length === 1 ? "conflict" : "conflicts"} to resolve
+                  </span>
+                  <span className="mt-1 block font-semibold">
+                    Overlapping timed activities are flagged on their day below.
+                  </span>
+                </StatusMessage>
+              </div>
+            ) : null}
 
             <div className="mt-5 space-y-2" aria-live="polite">
               {!hasHydrated ? <StatusMessage tone="info">Loading saved trip details...</StatusMessage> : null}
@@ -228,6 +276,7 @@ export function ItineraryBoard() {
                   trip.planningNotes,
                 ].join("|")}
                 trip={trip}
+                defaultOpen={settingsIncomplete}
                 onSave={(settings) => {
                   dispatch({ type: "updateTripSettings", settings });
                   showNotice("Trip settings saved.");
@@ -274,18 +323,12 @@ export function ItineraryBoard() {
 
             <section className="motion-panel rounded-2xl border border-line bg-panel-raised p-6">
               <p className="text-sm font-bold text-accent">Planner notes</p>
-              <blockquote className="mt-6 text-lg italic leading-8 text-ink">
-                &quot;{trip.planningNotes || "Add notes in trip settings to keep shared context close to the timeline."}&quot;
+              <blockquote className="mt-6 text-lg leading-8 text-ink">
+                {trip.planningNotes || "Add notes in trip settings to keep shared context close to the timeline."}
               </blockquote>
-              <div className="mt-8 flex items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <span className="grid size-10 place-items-center rounded-lg bg-accent text-sm font-bold text-accent-ink">
-                    SM
-                  </span>
-                  <span className="font-bold text-ink">Sarah Mitchell</span>
-                </div>
-                <span className="text-sm text-muted">2 hours ago</span>
-              </div>
+              <p className="mt-8 border-t border-line pt-4 text-sm text-muted">
+                Last updated {lastUpdatedLabel}
+              </p>
             </section>
           </aside>
         </div>

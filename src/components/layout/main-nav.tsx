@@ -12,7 +12,7 @@ const navItems = [
   { href: "/", label: "Explore" },
   { href: "/workspace", label: "Workspace" },
   { href: "/destinations", label: "Destinations" },
-  { href: "/itinerary", label: "Itineraries" },
+  { href: "/itinerary", label: "Itinerary" },
   { href: "/budget", label: "Insights" },
 ];
 

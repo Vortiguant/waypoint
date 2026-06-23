@@ -5,16 +5,28 @@ import { Card } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/utils";
 
 const categoryMeta: Record<ActivityCategory, { label: string; Icon: LucideIcon }> = {
-  transport: { label: "Regional Transport", Icon: Train },
-  lodging: { label: "Boutique Lodging", Icon: Landmark },
-  food: { label: "Curated Dining", Icon: Soup },
-  activity: { label: "Experiences", Icon: Ticket },
+  transport: { label: "Transport", Icon: Train },
+  lodging: { label: "Lodging", Icon: Landmark },
+  food: { label: "Dining", Icon: Soup },
+  activity: { label: "Activities", Icon: Ticket },
   shopping: { label: "Shopping", Icon: ShoppingBag },
   other: { label: "Other", Icon: Map },
 };
 
-export function BudgetCategoryList({ summary, currency }: { summary: BudgetSummary; currency: string }) {
+export function BudgetCategoryList({
+  summary,
+  currency,
+  updatedAt,
+}: {
+  summary: BudgetSummary;
+  currency: string;
+  updatedAt: string;
+}) {
   const largest = Math.max(...summary.byCategory.map((item) => item.total), 1);
+  const updatedLabel = new Date(updatedAt).toLocaleString(undefined, {
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
 
   return (
     <Card className="p-6 md:p-8">
@@ -25,7 +37,7 @@ export function BudgetCategoryList({ summary, currency }: { summary: BudgetSumma
             Where the money goes
           </h2>
         </div>
-        <p className="text-sm font-semibold text-muted">Updated today at 10:45 AM</p>
+        <p className="text-sm font-semibold text-muted">Updated {updatedLabel}</p>
       </div>
 
       <div className="mt-7 space-y-7">

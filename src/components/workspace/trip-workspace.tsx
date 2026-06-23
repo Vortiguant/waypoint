@@ -16,6 +16,7 @@ import {
   Undo2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { StatusMessage } from "@/components/ui/status-message";
@@ -87,43 +88,48 @@ function driverAction(label: string) {
 
 function SectionHeader({
   icon: Icon,
-  label,
   title,
-  description,
+  summary,
 }: {
   icon: typeof ClipboardCheck;
-  label: string;
   title: string;
-  description: string;
+  summary: string;
 }) {
   return (
-    <div className="flex items-start gap-4">
-      <span className="grid size-11 shrink-0 place-items-center rounded-lg border border-line bg-surface text-accent">
-        <Icon className="size-5" aria-hidden="true" />
-      </span>
-      <div>
-        <p className="text-sm font-bold text-accent">{label}</p>
-        <h2 className="mt-2 font-serif text-2xl font-semibold tracking-[-0.02em] text-ink md:text-3xl">
-          {title}
-        </h2>
-        <p className="mt-2 text-sm leading-6 text-muted">{description}</p>
+    <div className="flex items-start gap-3">
+      <Icon className="mt-0.5 size-5 shrink-0 text-accent" aria-hidden="true" />
+      <div className="min-w-0">
+        <h2 className="text-lg font-bold tracking-[-0.01em] text-ink">{title}</h2>
+        <p className="mt-1 text-sm leading-6 text-muted">{summary}</p>
       </div>
     </div>
   );
 }
 
 function DisclosurePanel({
-  children,
+  icon,
+  title,
   summary,
+  defaultOpen = false,
+  children,
 }: {
+  icon: typeof ClipboardCheck;
+  title: string;
+  summary: string;
+  defaultOpen?: boolean;
   children: ReactNode;
-  summary: ReactNode;
 }) {
+  const [open, setOpen] = useState(defaultOpen);
+
   return (
-    <details className="motion-panel group rounded-2xl border border-line bg-panel-raised p-5 md:p-6">
+    <details
+      open={open}
+      onToggle={(event) => setOpen(event.currentTarget.open)}
+      className="motion-panel group rounded-2xl border border-line bg-panel-raised p-5 md:p-6"
+    >
       <summary className="flex cursor-pointer list-none items-start justify-between gap-4 [&::-webkit-details-marker]:hidden">
-        <div className="min-w-0">{summary}</div>
-        <span className="mt-1 grid size-11 shrink-0 place-items-center rounded-lg border border-line bg-surface text-muted transition group-open:text-accent">
+        <SectionHeader icon={icon} title={title} summary={summary} />
+        <span className="mt-0.5 grid size-9 shrink-0 place-items-center rounded-lg border border-line bg-surface text-muted transition group-open:text-accent">
           <ChevronDown
             className="size-4 transition-transform duration-200 group-open:rotate-180"
             aria-hidden="true"
@@ -180,6 +186,23 @@ export function TripWorkspace() {
         : [...readiness.inputs].sort((first, second) => first.score - second.score);
 
     return rankedDrivers.slice(0, 2);
+  }, [readiness]);
+  const openSection = useMemo(() => {
+    const sectionByLabel: Record<string, string> = {
+      "Packing readiness": "packing",
+      "Document readiness": "documents",
+      "Decision readiness": "decisions",
+      "Spatial anchors": "anchors",
+    };
+    const ranked = [...readiness.inputs].sort((first, second) => first.score - second.score);
+
+    for (const input of ranked) {
+      if (input.status !== "good" && sectionByLabel[input.label]) {
+        return sectionByLabel[input.label];
+      }
+    }
+
+    return null;
   }, [readiness]);
   const unpackedCount = readiness.counts.totalPackingItems - readiness.counts.packedItems;
   const documentAttentionCount =
@@ -327,67 +350,67 @@ export function TripWorkspace() {
   }
 
   return (
-    <section className="px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+    <section className="px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
       <div className="mx-auto max-w-7xl">
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_25rem] lg:items-start">
-          <div>
-            <p className="editorial-label text-accent">{destination.name} command center</p>
-            <h1 className="mt-3 max-w-4xl font-serif text-4xl font-semibold leading-[1.08] tracking-[-0.02em] text-ink md:text-5xl">
-              Prepare the whole trip from one workspace.
-            </h1>
-            <p className="mt-5 max-w-2xl text-base leading-8 text-muted">
-              Track readiness, settle decisions, pack essentials, check documents, and keep
-              spatial context close to the itinerary.
-            </p>
-          </div>
+        <header className="max-w-3xl">
+          <p className="editorial-label text-accent">{destination.name} command center</p>
+          <h1 className="mt-3 font-serif text-4xl font-semibold leading-[1.05] tracking-[-0.02em] text-ink md:text-5xl">
+            Prepare the whole trip from one workspace.
+          </h1>
+          <p className="mt-4 text-base leading-7 text-muted">
+            Start with the next actions below. Readiness updates automatically as you make progress.
+          </p>
+        </header>
 
-          <aside className="motion-panel rounded-2xl border border-accent bg-accent p-6 text-accent-ink">
-            <p className="text-2xl font-bold tracking-[-0.01em]">{readiness.label}</p>
-            <p className="mt-5 text-6xl font-extrabold leading-none tracking-[-0.02em] tabular-nums">
-              {readiness.score}
-            </p>
-            <p className="mt-5 text-sm font-semibold leading-6 opacity-90">{readiness.detail}</p>
-            <div className="mt-8 divide-y divide-accent-ink/15 text-sm">
-              <p className="py-2.5">
+        <div className="mt-8 grid gap-5 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start">
+          <section className="motion-panel rounded-2xl border border-line bg-panel-raised p-5 md:p-6">
+            <SectionHeader
+              icon={ClipboardCheck}
+              title="What to do next"
+              summary="Generated from the current trip state, not from a network service."
+            />
+            <div className="mt-5 divide-y divide-line">
+              {nextActions.map((item) => (
+                <article key={item.id} className="py-4 first:pt-0 last:pb-0">
+                  <p className="font-bold text-ink">{item.title}</p>
+                  <p className="mt-1 text-sm leading-6 text-muted">{item.description}</p>
+                  {item.href ? (
+                    <Link
+                      href={item.href}
+                      className="mt-3 inline-flex min-h-11 items-center text-sm font-bold text-accent hover:text-ink"
+                    >
+                      Open related view
+                    </Link>
+                  ) : null}
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <aside className="motion-panel rounded-2xl border border-accent bg-accent p-5 text-accent-ink md:p-6 lg:sticky lg:top-28">
+            <div className="flex items-baseline justify-between gap-3">
+              <p className="text-lg font-bold tracking-[-0.01em]">{readiness.label}</p>
+              <p className="text-4xl font-extrabold leading-none tracking-[-0.02em] tabular-nums">
+                {readiness.score}
+              </p>
+            </div>
+            <p className="mt-3 text-sm font-semibold leading-6 opacity-90">{readiness.detail}</p>
+            <div className="mt-5 divide-y divide-accent-ink/15 text-sm">
+              <p className="py-2">
                 {readiness.counts.packedItems}/{readiness.counts.totalPackingItems} packed
               </p>
-              <p className="py-2.5">
+              <p className="py-2">
                 {readiness.counts.readyDocuments}/{readiness.counts.totalDocuments} docs
               </p>
-              <p className="py-2.5">
+              <p className="py-2">
                 {readiness.counts.decidedPinnedDecisions}/{readiness.counts.totalPinnedDecisions} decisions
               </p>
-              <p className="py-2.5">
+              <p className="py-2">
                 {readiness.counts.spatialAnchors} anchors
               </p>
             </div>
           </aside>
         </div>
-
-        <section className="motion-panel mt-8 rounded-2xl border border-line bg-panel-raised p-5 md:p-6">
-          <SectionHeader
-            icon={ClipboardCheck}
-            label="Next actions"
-            title="What to do next"
-            description="Generated from the current trip state, not from a network service."
-          />
-          <div className="mt-5 divide-y divide-line">
-            {nextActions.map((item) => (
-              <article key={item.id} className="py-4 first:pt-0 last:pb-0">
-                <p className="font-bold text-ink">{item.title}</p>
-                <p className="mt-1 text-sm leading-6 text-muted">{item.description}</p>
-                {item.href ? (
-                  <Link
-                    href={item.href}
-                    className="mt-3 inline-flex min-h-11 items-center text-sm font-bold text-accent hover:text-ink"
-                  >
-                    Open related view
-                  </Link>
-                ) : null}
-              </article>
-            ))}
-          </div>
-        </section>
 
         <div className="mt-5 space-y-2" aria-live="polite">
           {!hasHydrated ? <StatusMessage tone="info">Loading saved workspace...</StatusMessage> : null}
@@ -417,9 +440,8 @@ export function TripWorkspace() {
             <section className="motion-panel rounded-2xl border border-line bg-panel-raised p-5 md:p-6">
               <SectionHeader
                 icon={Layers3}
-                label="Readiness gaps"
                 title="Top score drivers"
-                description="Start with the lowest inputs. The full deterministic formula stays available when you need it."
+                summary="Start with the lowest inputs. The full deterministic formula stays available when you need it."
               />
               <div className="mt-6 divide-y divide-line">
                 {priorityDrivers.map((input) => (
@@ -474,14 +496,10 @@ export function TripWorkspace() {
             </section>
 
             <DisclosurePanel
-              summary={
-                <SectionHeader
-                  icon={PackageCheck}
-                  label="Packing"
-                  title="Essentials checklist"
-                  description={packingSummary}
-                />
-              }
+              icon={PackageCheck}
+              title="Essentials checklist"
+              summary={packingSummary}
+              defaultOpen={openSection === "packing"}
             >
               <form
                 className="grid gap-3 md:grid-cols-[minmax(0,1fr)_12rem_auto]"
@@ -516,6 +534,13 @@ export function TripWorkspace() {
                   Add
                 </Button>
               </form>
+              {trip.packingItems.length === 0 ? (
+                <EmptyState
+                  className="mt-5"
+                  title="No packing items yet"
+                  description="Add the first essential above to start the packing checklist."
+                />
+              ) : null}
               <div className="mt-5 divide-y divide-line">
                 {trip.packingItems.map((item) => (
                   <article key={item.id} className="py-3">
@@ -607,14 +632,10 @@ export function TripWorkspace() {
             </DisclosurePanel>
 
             <DisclosurePanel
-              summary={
-                <SectionHeader
-                  icon={FileCheck2}
-                  label="Documents"
-                  title="Travel document checklist"
-                  description={documentSummary}
-                />
-              }
+              icon={FileCheck2}
+              title="Travel document checklist"
+              summary={documentSummary}
+              defaultOpen={openSection === "documents"}
             >
               <form
                 className="grid gap-3 md:grid-cols-[minmax(0,1fr)_auto]"
@@ -636,6 +657,13 @@ export function TripWorkspace() {
                   Add
                 </Button>
               </form>
+              {trip.documents.length === 0 ? (
+                <EmptyState
+                  className="mt-5"
+                  title="No documents tracked yet"
+                  description="Add passports, confirmations, or offline files to track their status."
+                />
+              ) : null}
               <div className="mt-5 divide-y divide-line">
                 {trip.documents.map((document) => (
                   <article key={document.id} className="py-3">
@@ -722,14 +750,10 @@ export function TripWorkspace() {
 
           <aside className="space-y-5 lg:sticky lg:top-28 lg:h-fit">
             <DisclosurePanel
-              summary={
-                <SectionHeader
-                  icon={Pin}
-                  label="Decisions"
-                  title="Pinned trip calls"
-                  description={decisionSummary}
-                />
-              }
+              icon={Pin}
+              title="Pinned trip calls"
+              summary={decisionSummary}
+              defaultOpen={openSection === "decisions"}
             >
               <form
                 className="flex gap-2"
@@ -750,6 +774,13 @@ export function TripWorkspace() {
                   <span className="sr-only">Add decision</span>
                 </Button>
               </form>
+              {trip.pinnedDecisions.length === 0 ? (
+                <EmptyState
+                  className="mt-4"
+                  title="No pinned decisions yet"
+                  description="Pin a recurring trip question above to track how it gets settled."
+                />
+              ) : null}
               <div className="mt-4 divide-y divide-line">
                 {trip.pinnedDecisions.map((decision) => (
                   <article key={decision.id} className="py-3">
@@ -841,14 +872,10 @@ export function TripWorkspace() {
 
         <div className="mt-5">
           <DisclosurePanel
-            summary={
-              <SectionHeader
-                icon={MapPinned}
-                label="Spatial anchors"
-                title="Trip geography"
-                description={anchorSummary}
-              />
-            }
+            icon={MapPinned}
+            title="Trip geography"
+            summary={anchorSummary}
+            defaultOpen={openSection === "anchors"}
           >
             <form
               className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_12rem_12rem_auto]"
@@ -903,12 +930,14 @@ export function TripWorkspace() {
               </Button>
             </form>
 
+            {anchorGroups.length === 0 ? (
+              <EmptyState
+                className="mt-6"
+                title="No spatial anchors yet"
+                description="Add the stay or arrival point first so the trip has geographic context."
+              />
+            ) : null}
             <div className="mt-6 grid gap-6 lg:grid-cols-3">
-              {anchorGroups.length === 0 ? (
-                <p className="text-sm font-semibold leading-6 text-muted lg:col-span-3">
-                  No spatial anchors yet. Add the stay or arrival point first.
-                </p>
-              ) : null}
               {anchorGroups.map((group) => (
                 <section
                   key={group.dayId ?? "unassigned"}

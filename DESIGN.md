@@ -12,6 +12,20 @@ Waypoint now follows a warm editorial travel direction adapted from the Stitch r
 - Compact surfaces should not use hero-scale type. Use smaller Fraunces headings for cards, sidebars, and panels.
 - Editorial labels use `.editorial-label`: uppercase, Manrope, 12px, bold, with positive letter spacing.
 
+### Product type ladder
+
+Product routes (`/workspace`, `/itinerary`, `/budget`) keep a small, operational hierarchy so the planning task reads more clearly than the chrome around it:
+
+| Level | Use | Classes |
+|-------|-----|---------|
+| Page kicker | Route identity only | `.editorial-label text-accent` |
+| Page title | One H1 per route | `font-serif text-4xl md:text-5xl` |
+| Section title | Checklists, panels, settings, day planner | `text-lg font-bold text-ink` |
+| Row label / meta | Form labels, counts, statuses | `text-sm font-semibold text-muted` |
+| Status | Conflicts, readiness, success | semantic tokens, sentence case |
+
+Reserve Fraunces (serif) on product routes for the page title and the day-column headings only; everything else uses Manrope so dense surfaces stay calm.
+
 ## Color
 
 Tokens live in `src/app/globals.css` and are exposed through Tailwind theme aliases.
@@ -91,8 +105,9 @@ Current editorial assets:
 - `/workspace`: local-first command center with readiness scoring, next actions, packing, documents, pinned decisions, and spatial anchors.
 - `/destinations`: searchable editorial browser retaining filter and sort behavior.
 - `/destinations/[id]`: destination feature story with hero image, narrative, top decisions, inquiry panel, and stays.
-- `/itinerary`: timeline planner preserving add, edit, delete, reorder, move, reset, conflict detection, and hydration notices.
-- `/budget`: trip insights dashboard preserving budget math, traveler controls, category totals, and local trip state.
+- `/itinerary`: timeline planner preserving add, edit, delete, reorder, move, guarded reset, conflict detection, and hydration notices.
+- `/budget`: trip insights dashboard preserving budget math, category totals, and local trip state. Traveler count is read-only here and edited from trip settings.
+- Product routes share one vertical padding scale (`py-12 lg:py-16`); destination story pages may use a taller `py-12 lg:py-20`.
 
 ## Local Workspace Model
 

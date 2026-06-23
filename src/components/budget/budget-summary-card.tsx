@@ -15,7 +15,7 @@ export function BudgetSummaryCard({
     <Card className="p-6 md:p-8">
       <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
         <div>
-          <h2 className="font-serif text-2xl font-semibold tracking-[-0.02em] text-ink md:text-3xl">
+          <h2 className="text-lg font-bold text-ink">
             Budget Distribution
           </h2>
           <p className="mt-3 max-w-xl text-sm leading-6 text-muted">

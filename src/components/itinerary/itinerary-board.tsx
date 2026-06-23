@@ -158,7 +158,7 @@ export function ItineraryBoard() {
     dateStyle: "medium",
     timeStyle: "short",
   });
-  const settingsIncomplete = !trip.startDate || !trip.budgetTarget || !trip.destinationId;
+  const settingsIncomplete = !trip.startDate || trip.budgetTarget == null || !trip.destinationId;
 
   return (
     <section className="px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
@@ -306,7 +306,7 @@ export function ItineraryBoard() {
             <section className="motion-panel overflow-hidden rounded-2xl border border-line bg-panel-raised">
               <div className="h-40 bg-[radial-gradient(circle_at_18%_18%,var(--accent-soft),transparent_34%),linear-gradient(135deg,var(--accent-soft),var(--panel),var(--soft))]" />
               <div className="p-6">
-                <h2 className="font-serif text-2xl font-semibold tracking-[-0.02em] text-ink">Trip Logistics</h2>
+                <h2 className="text-lg font-bold text-ink">Trip Logistics</h2>
                 <div className="mt-6 space-y-5">
                 {logistics.map(({ Icon, title, description }) => (
                     <div key={title} className="flex gap-4">

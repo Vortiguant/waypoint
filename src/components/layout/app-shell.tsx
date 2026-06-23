@@ -11,7 +11,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         Skip to main content
       </a>
       <MainNav />
-      <main id="main-content" className="motion-page">
+      <main id="main-content" tabIndex={-1} className="motion-page">
         {children}
       </main>
       <SiteFooter />

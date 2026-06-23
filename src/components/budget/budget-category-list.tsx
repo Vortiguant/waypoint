@@ -33,7 +33,7 @@ export function BudgetCategoryList({
       <div className="flex flex-col gap-3 border-b border-line pb-5 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-sm font-bold text-accent">Allocation</p>
-          <h2 className="mt-2 font-serif text-2xl font-semibold tracking-[-0.02em] text-ink md:text-3xl">
+          <h2 className="mt-2 text-lg font-bold text-ink">
             Where the money goes
           </h2>
         </div>

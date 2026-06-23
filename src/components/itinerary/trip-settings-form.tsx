@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Settings2 } from "lucide-react";
+import { ChevronDown, Settings2 } from "lucide-react";
 import { destinations } from "@/lib/data/mock-destinations";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -37,6 +37,7 @@ function valuesFromTrip(trip: Trip): TripSettingsValues {
 export function TripSettingsForm({
   trip,
   onSave,
+  defaultOpen = false,
 }: {
   trip: Trip;
   onSave: (settings: {
@@ -50,8 +51,9 @@ export function TripSettingsForm({
     pacePreference: PacePreference;
     planningNotes?: string;
   }) => void;
+  defaultOpen?: boolean;
 }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(defaultOpen);
   const [values, setValues] = useState(() => valuesFromTrip(trip));
 
   function update<Value extends keyof TripSettingsValues>(
@@ -69,14 +71,20 @@ export function TripSettingsForm({
         onClick={() => setIsOpen((current) => !current)}
         aria-expanded={isOpen}
       >
-        <span>
-          <span className="text-sm font-semibold text-accent">Trip settings</span>
-          <span className="mt-2 block font-serif text-2xl font-semibold text-ink">
-            Dates, target, pace, and notes
+        <span className="flex items-start gap-3">
+          <Settings2 className="mt-0.5 size-5 shrink-0 text-accent" aria-hidden="true" />
+          <span className="min-w-0">
+            <span className="block text-lg font-bold tracking-[-0.01em] text-ink">Trip settings</span>
+            <span className="mt-1 block text-sm leading-6 text-muted">
+              Dates, destination, target, pace, and planning notes.
+            </span>
           </span>
         </span>
-        <span className="inline-grid size-11 shrink-0 place-items-center rounded-lg border border-line bg-surface text-accent transition-transform duration-200 ease-[var(--ease-out)]">
-          <Settings2 className="size-4" aria-hidden="true" />
+        <span className="inline-grid size-9 shrink-0 place-items-center rounded-lg border border-line bg-surface text-muted transition">
+          <ChevronDown
+            className={`size-4 transition-transform duration-200 ${isOpen ? "rotate-180 text-accent" : ""}`}
+            aria-hidden="true"
+          />
         </span>
       </button>
 

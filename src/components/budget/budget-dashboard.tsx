@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Minus, Plus, Share2, UsersRound } from "lucide-react";
+import { Share2, UsersRound } from "lucide-react";
 import { BudgetCategoryList } from "@/components/budget/budget-category-list";
 import { BudgetSummaryCard } from "@/components/budget/budget-summary-card";
 import { Button } from "@/components/ui/button";
@@ -21,19 +21,19 @@ function scoreTone(status: InsightScore["status"]) {
   return "border-danger/35 bg-danger/10 text-danger";
 }
 
-function InsightPanel({ insight }: { insight: InsightScore }) {
+function InsightRow({ insight }: { insight: InsightScore }) {
   return (
-    <article className="motion-panel rounded-2xl border border-line bg-panel-raised p-5">
+    <article className="py-5 first:pt-0 last:pb-0">
       <div className="flex items-start justify-between gap-4">
-        <div>
-          <p className="text-sm font-bold text-ink">{insight.label}</p>
-          <p className="mt-2 text-sm leading-6 text-muted">{insight.detail}</p>
+        <div className="min-w-0">
+          <p className="font-bold text-ink">{insight.label}</p>
+          <p className="mt-1 text-sm leading-6 text-muted">{insight.detail}</p>
         </div>
-        <span className={`rounded-lg border px-3 py-2 text-sm font-bold ${scoreTone(insight.status)}`}>
+        <span className={`shrink-0 rounded-lg border px-3 py-2 text-sm font-bold ${scoreTone(insight.status)}`}>
           {insight.score}/10
         </span>
       </div>
-      <ul className="mt-4 space-y-2 text-sm leading-6 text-muted">
+      <ul className="mt-3 space-y-1 text-sm leading-6 text-muted">
         {insight.inputs.map((input) => (
           <li key={input}>- {input}</li>
         ))}
@@ -43,7 +43,7 @@ function InsightPanel({ insight }: { insight: InsightScore }) {
 }
 
 export function BudgetDashboard() {
-  const { trip, hasHydrated, dispatch } = useTrip();
+  const { trip, hasHydrated } = useTrip();
   const [shareStatus, setShareStatus] = useState<string | null>(null);
   const summary = useMemo(() => calculateBudget(trip), [trip]);
   const destination = useMemo(
@@ -65,11 +65,11 @@ export function BudgetDashboard() {
   }
 
   return (
-    <section className="px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+    <section className="px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
       <div className="mx-auto max-w-7xl">
         <div className="mb-10 grid gap-6 md:grid-cols-[1fr_auto] md:items-end">
           <div>
-            <p className="text-sm font-semibold text-accent">Trip insights</p>
+            <p className="editorial-label text-accent">{destination.name} insights</p>
             <h1 className="mt-3 font-serif text-4xl font-semibold leading-[1.08] tracking-[-0.02em] text-ink md:text-5xl">
               {trip.title} insights
             </h1>
@@ -78,11 +78,6 @@ export function BudgetDashboard() {
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3 md:justify-end">
-            <div className="flex -space-x-2">
-              <span className="grid size-10 place-items-center rounded-lg border-2 border-surface bg-accent text-xs font-bold text-accent-ink">SM</span>
-              <span className="grid size-10 place-items-center rounded-lg border-2 border-surface bg-panel text-xs font-bold text-ink">JW</span>
-              <span className="grid size-10 place-items-center rounded-lg border-2 border-surface bg-panel text-xs font-bold text-muted">+2</span>
-            </div>
             <Link
               href="/workspace"
               className="inline-flex min-h-11 items-center justify-center rounded-lg border border-line bg-surface px-5 py-2.5 text-sm font-bold text-ink transition hover:-translate-y-px hover:border-accent hover:bg-panel focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent dark:bg-panel dark:hover:bg-surface"
@@ -112,33 +107,31 @@ export function BudgetDashboard() {
         <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_24rem]">
           <div className="space-y-5">
             <BudgetSummaryCard summary={summary} currency={trip.currency} travelers={trip.travelers} />
-            <BudgetCategoryList summary={summary} currency={trip.currency} />
-            <div className="grid gap-5 md:grid-cols-2">
-              <InsightPanel insight={insights.budgetHealth} />
-              <InsightPanel insight={insights.paceScore} />
-              <InsightPanel insight={insights.logisticsRisk} />
-              <InsightPanel insight={insights.conflictLoad} />
-            </div>
+            <BudgetCategoryList summary={summary} currency={trip.currency} updatedAt={trip.updatedAt} />
+            <section className="motion-panel rounded-2xl border border-line bg-panel-raised p-5 md:p-6">
+              <div className="flex items-start justify-between gap-4">
+                <div className="min-w-0">
+                  <h2 className="text-lg font-bold tracking-[-0.01em] text-ink">Trip insights</h2>
+                  <p className="mt-1 text-sm leading-6 text-muted">{insights.valueScore.detail}</p>
+                </div>
+                <div className="shrink-0 text-right">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-muted">Value</p>
+                  <p className="text-3xl font-extrabold leading-none tracking-[-0.02em] text-accent tabular-nums">
+                    {insights.valueScore.score}
+                  </p>
+                </div>
+              </div>
+              <div className="mt-5 divide-y divide-line border-t border-line">
+                <InsightRow insight={insights.budgetHealth} />
+                <InsightRow insight={insights.paceScore} />
+                <InsightRow insight={insights.logisticsRisk} />
+                <InsightRow insight={insights.conflictLoad} />
+                <InsightRow insight={insights.valueScore} />
+              </div>
+            </section>
           </div>
 
-          <aside className="space-y-5">
-            <section className="motion-panel rounded-2xl border border-accent bg-accent p-6 text-accent-ink">
-              <p className="text-2xl font-bold tracking-[-0.01em]">Value Score</p>
-              <p className="mt-5 text-6xl font-extrabold leading-none tracking-[-0.02em] tabular-nums">
-                {insights.valueScore.score}
-              </p>
-              <p className="mt-5 text-base font-medium leading-7 opacity-90">
-                {insights.valueScore.detail}
-              </p>
-              <ul className="mt-12 space-y-4 text-sm">
-                {insights.valueScore.inputs.map((input) => (
-                  <li key={input} className="border-t border-accent-ink/20 pt-4 font-bold opacity-90">
-                    {input}
-                  </li>
-                ))}
-              </ul>
-            </section>
-
+          <aside className="space-y-5 lg:sticky lg:top-28 lg:h-fit">
             <section className="motion-panel rounded-2xl border border-line bg-panel-raised p-5">
               <p className="text-sm font-bold text-accent">Recommendations</p>
               <div className="mt-4 divide-y divide-line">
@@ -165,33 +158,18 @@ export function BudgetDashboard() {
                 />
               </div>
               <div className="p-5">
-                <p className="text-sm font-bold text-accent">Travelers</p>
+                <p className="text-sm font-semibold text-muted">Travelers</p>
                 <div className="mt-3 flex items-center justify-between gap-3">
-                  <div className="inline-flex items-center gap-2 text-2xl font-bold text-ink">
+                  <span className="inline-flex items-center gap-2 text-2xl font-bold text-ink">
                     <UsersRound className="size-5 text-accent" aria-hidden="true" />
                     {trip.travelers}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Button
-                      type="button"
-                      variant="secondary"
-                      className="size-10 px-0"
-                      disabled={trip.travelers <= 1}
-                      onClick={() => dispatch({ type: "setTravelers", travelers: trip.travelers - 1 })}
-                    >
-                      <Minus className="size-4" aria-hidden="true" />
-                      <span className="sr-only">Remove traveler</span>
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="secondary"
-                      className="size-10 px-0"
-                      onClick={() => dispatch({ type: "setTravelers", travelers: trip.travelers + 1 })}
-                    >
-                      <Plus className="size-4" aria-hidden="true" />
-                      <span className="sr-only">Add traveler</span>
-                    </Button>
-                  </div>
+                  </span>
+                  <Link
+                    href="/itinerary"
+                    className="inline-flex min-h-11 items-center text-sm font-bold text-accent transition hover:text-ink"
+                  >
+                    Edit in trip settings
+                  </Link>
                 </div>
               </div>
             </section>

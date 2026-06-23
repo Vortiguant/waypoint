@@ -11,7 +11,7 @@ export function StatusMessage({
 }) {
   const tones = {
     info: "border-accent/25 bg-accent/10 text-ink",
-    success: "border-positive/30 bg-positive/10 text-positive",
+    success: "border-positive/40 bg-positive/10 text-ink",
     error: "border-danger/35 bg-danger/10 text-danger",
   } as const;
 

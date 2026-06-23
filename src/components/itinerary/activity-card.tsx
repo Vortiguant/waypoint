@@ -4,7 +4,6 @@ import { useState } from "react";
 import { AlertTriangle, Clock, GripVertical, MapPin, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import type { Activity, TripDay } from "@/types/travel";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { ActivityForm } from "@/components/itinerary/activity-form";
 import { MoveActivityControls } from "@/components/itinerary/move-activity-controls";
 import { formatCurrency } from "@/lib/utils";
@@ -40,7 +39,7 @@ export function ActivityCard({
 
   if (isEditing) {
     return (
-      <Card className="border-accent/30 bg-panel p-4">
+      <article className="motion-panel rounded-2xl border border-accent/40 bg-panel p-5">
         <ActivityForm
           activity={activity}
           submitLabel="Save changes"
@@ -50,12 +49,12 @@ export function ActivityCard({
           }}
           onCancel={() => setIsEditing(false)}
         />
-      </Card>
+      </article>
     );
   }
 
   return (
-    <article className={`motion-panel rounded-2xl border p-5 ${tone}`}>
+    <article className={`rounded-2xl border p-5 ${tone}`}>
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
@@ -70,10 +69,10 @@ export function ActivityCard({
               </span>
             ) : null}
           </div>
-          <h3 className="mt-3 font-serif text-2xl font-semibold leading-tight tracking-[-0.015em] text-ink">
+          <h3 className="mt-3 text-lg font-bold leading-snug text-ink">
             {activity.title}
           </h3>
-          <p className="mt-2 text-base leading-7 text-muted">{activity.notes}</p>
+          <p className="mt-2 text-sm leading-7 text-muted">{activity.notes}</p>
         </div>
         <p className="shrink-0 rounded-lg bg-panel px-3 py-2 text-sm font-bold text-ink">
           {formatCurrency(activity.cost, currency)}
@@ -91,38 +90,37 @@ export function ActivityCard({
         </span>
       </div>
 
-      <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-line pt-4">
+      <div className="mt-5 flex flex-wrap items-center gap-2 border-t border-line pt-4">
         <Button type="button" variant="secondary" className="gap-1 px-3 py-1.5 text-xs" onClick={() => setIsEditing(true)}>
           <Pencil className="size-3" aria-hidden="true" /> Edit
+        </Button>
+        <Button type="button" variant="danger" className="gap-1 px-3 py-1.5 text-xs" onClick={onDelete}>
+          <Trash2 className="size-3" aria-hidden="true" /> Delete
         </Button>
         <Button
           type="button"
           variant="ghost"
-          className="gap-1 px-3 py-1.5 text-xs"
+          className="ml-auto gap-1 px-3 py-1.5 text-xs"
           aria-expanded={showMoreActions}
           onClick={() => setShowMoreActions((current) => !current)}
         >
-          <MoreHorizontal className="size-3" aria-hidden="true" /> More actions
+          <MoreHorizontal className="size-3" aria-hidden="true" /> Move
         </Button>
       </div>
 
       {showMoreActions ? (
-        <div className="motion-status mt-3 flex flex-wrap gap-2 border-t border-line pt-3">
-          <Button type="button" variant="ghost" className="gap-1 px-3 py-1.5 text-xs" disabled={index === 0} onClick={() => onReorder("up")}>
-            <GripVertical className="size-3" aria-hidden="true" /> Move up
-          </Button>
-          <Button type="button" variant="ghost" className="gap-1 px-3 py-1.5 text-xs" disabled={index === totalActivities - 1} onClick={() => onReorder("down")}>
-            <GripVertical className="size-3" aria-hidden="true" /> Move down
-          </Button>
-          <Button type="button" variant="danger" className="gap-1 px-3 py-1.5 text-xs" onClick={onDelete}>
-            <Trash2 className="size-3" aria-hidden="true" /> Delete
-          </Button>
+        <div className="motion-status mt-3 space-y-3 border-t border-line pt-3">
+          <div className="flex flex-wrap gap-2">
+            <Button type="button" variant="ghost" className="gap-1 px-3 py-1.5 text-xs" disabled={index === 0} onClick={() => onReorder("up")}>
+              <GripVertical className="size-3" aria-hidden="true" /> Move up
+            </Button>
+            <Button type="button" variant="ghost" className="gap-1 px-3 py-1.5 text-xs" disabled={index === totalActivities - 1} onClick={() => onReorder("down")}>
+              <GripVertical className="size-3" aria-hidden="true" /> Move down
+            </Button>
+          </div>
+          <MoveActivityControls day={day} days={days} onMove={onMove} />
         </div>
       ) : null}
-
-      <div className="mt-3">
-        <MoveActivityControls day={day} days={days} onMove={onMove} />
-      </div>
     </article>
   );
 }

@@ -48,7 +48,11 @@ export function DayColumn({
 
       <div className="relative md:border-l md:border-line md:pl-9">
         <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <ConflictAlert conflicts={dayConflicts} />
+          {dayConflicts.length > 0 ? (
+            <ConflictAlert conflicts={dayConflicts} />
+          ) : (
+            <span aria-hidden="true" />
+          )}
           <Button
             type="button"
             variant="secondary"

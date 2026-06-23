@@ -3,7 +3,7 @@ import { StatusMessage } from "@/components/ui/status-message";
 
 export function ConflictAlert({ conflicts }: { conflicts: ScheduleConflict[] }) {
   if (conflicts.length === 0) {
-    return <StatusMessage tone="success">No scheduling conflicts on this day.</StatusMessage>;
+    return null;
   }
 
   return (
